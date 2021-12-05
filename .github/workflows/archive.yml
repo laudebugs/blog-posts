@@ -52,7 +52,7 @@ jobs:
         if: steps.verify-changed-files.outputs.files_changed == 'true'
         uses: peter-evans/create-pull-request@v3
         with: |
-          token: ${{ secrets.SANDSTORM }}
+          token: ${{ secrets.BLOG_POSTS }}
           commit-message: ' :package: articles: cache npm packages'
           committer: GitHub <noreply@github.com>
           author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
