@@ -1,14 +1,19 @@
-const fs = require('fs')
+import fs from 'fs'
+import {getFilesFromDir} from './helpers'
 
-const { getFilesFromDir } = require('./helpers/helpers')
 const devPostData = getFilesFromDir('dev', false)
 const journalPostData = getFilesFromDir('journal', false)
 
-const combinedData = [...devPostData, ...journalPostData]
+let combinedData = [...devPostData, ...journalPostData]
 
-combinedData.sort((a, b) => b.date - a.date).reverse()
+combinedData = combinedData
+  .sort((a, b) => {
+    return b.date - a.date
+  })
 
-combinedData.map((post, index) => {
+combinedData = combinedData.reverse()
+
+combinedData = combinedData.map((post, index) => {
   post.no = index + 1
   return post
 })
@@ -26,5 +31,4 @@ fs.writeFile(
       console.log('Successfully Updated archive✅')
     }
   },
-  4
 )

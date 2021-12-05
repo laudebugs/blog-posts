@@ -1,11 +1,11 @@
-const fs = require('fs')
-const path = require('path')
-const matter = require('gray-matter')
-const Feed = require('feed').Feed
-const marked = require('marked')
-const uniq = require('lodash').uniq
+import fs from 'fs'
+import path from 'path'
+import matter from 'gray-matter'
+import { Feed } from 'feed'
+import { marked } from 'marked'
+import {uniq} from 'lodash'
 
-function getFilesFromDir(dir, includeSource) {
+export function getFilesFromDir(dir: string, includeSource: boolean) {
   const postsDirectory = path.join(process.cwd(), `${dir}`)
   const filenames = fs.readdirSync(postsDirectory)
   return filenames.map(filename => {
@@ -19,14 +19,17 @@ function getFilesFromDir(dir, includeSource) {
   })
 }
 
-function getImageForPost(slug) {
+export function getImageForPost(slug: string) {
   const imagesPath = 'assets/'
   const images = fs.readdirSync(imagesPath)
   const image = images.find(_image => _image.includes(slug))
   return image ?? ''
 }
 
-function createFeed(posts) {
+export type Post = {
+  [key: string]: any;
+}
+export function createFeed(posts: Post[]) {
   const feed = new Feed({
     title: "Lau de Bugs' Blog",
     description: 'Life and Software Development Blog',
@@ -49,8 +52,8 @@ function createFeed(posts) {
     }
   })
 
-  let categories = []
-  posts.forEach(post => {
+  let categories: any[]= []
+  posts.forEach((post: any) => {
     categories.push(...post.tags)
     feed.addItem({
       title: post.title,
@@ -83,10 +86,10 @@ function createFeed(posts) {
   return feed
 }
 
-function writeFeed(data, fileName) {
+export function writeFeed(data, fileName) {
   data.sort((a, b) => b.date - a.date).reverse()
 
-  data.map((post, index) => {
+  data.map((post, index: number) => {
     post.no = index + 1
     return post
   })
@@ -110,8 +113,6 @@ function writeFeed(data, fileName) {
         console.log(`Successfully Updated ${fileName} Rss Feeds`)
       }
     },
-    4
   )
 }
 
-module.exports = { getFilesFromDir, getImageForPost, createFeed, writeFeed }

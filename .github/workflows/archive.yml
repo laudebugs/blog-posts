@@ -36,12 +36,12 @@ jobs:
           cache: 'npm'
       - name: Install packages 🤖
         run: npm install
-      - name: 'chore(Archive ⚙️): update Posts Archive'
-        run: node posts/archive.js
+      - name: 'Compile TS files ⚙️'
+        run: tsc
       - name: Update Rss Feeds and Archive 🦄
         run: |
-          node src/feed.js
-          node src/archive.js
+          node dist/feed.js
+          node dist/archive.js
       - name: Verify Changed files 🐒
         uses: tj-actions/verify-changed-files@v8.3
         id: verify-changed-files
