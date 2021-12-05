@@ -1,0 +1,19 @@
+{
+  "name": "blog-posts",
+  "version": "1.0.0",
+  "description": "Blog Posts Github Repo",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lbugasu/blog-posts.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lbugasu/blog-posts/issues"
+  },
+  "homepage": "https://github.com/lbugasu/blog-posts#readme"
+}
