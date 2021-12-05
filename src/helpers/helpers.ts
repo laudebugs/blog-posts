@@ -76,7 +76,7 @@ export function createFeed(posts: Post[]) {
         }
       ],
       date: new Date(post.publishedOn),
-      image: `https://www.laudebugs.me/post-images/${post.image}`
+      image: `https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/${post.image}`
     })
   })
 
