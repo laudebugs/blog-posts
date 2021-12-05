@@ -16,7 +16,7 @@ combinedData.map((post, index) => {
 combinedData.sort((a, b) => b.no - a.no)
 
 fs.writeFile(
-  './posts/archive.json',
+  './out/archive.json',
   JSON.stringify(combinedData, null, 4),
   'utf8',
   err => {

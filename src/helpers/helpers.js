@@ -20,7 +20,7 @@ function getFilesFromDir(dir, includeSource) {
 }
 
 function getImageForPost(slug) {
-  const imagesPath = 'apps/lbugasu.github.io/public/post-images/'
+  const imagesPath = 'assets/'
   const images = fs.readdirSync(imagesPath)
   const image = images.find(_image => _image.includes(slug))
   return image ?? ''
@@ -100,7 +100,7 @@ function writeFeed(data, fileName) {
     atom: feed.atom1()
   }
   fs.writeFile(
-    `./posts/${fileName}.json`,
+    `out/${fileName}.json`,
     JSON.stringify(feedStore, null, 4),
     'utf8',
     err => {
