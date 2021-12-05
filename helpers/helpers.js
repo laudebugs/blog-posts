@@ -6,13 +6,13 @@ const marked = require('marked')
 const uniq = require('lodash').uniq
 
 function getFilesFromDir(dir, includeSource) {
-  const postsDirectory = path.join(process.cwd(), `posts/${dir}`)
+  const postsDirectory = path.join(process.cwd(), `${dir}`)
   const filenames = fs.readdirSync(postsDirectory)
   return filenames.map(filename => {
-    const fullPath = path.join(process.cwd(), `posts/${dir}/`, filename)
+    const fullPath = path.join(process.cwd(), `${dir}/`, filename)
     const post = fs.readFileSync(fullPath, 'utf-8')
     const { data, content } = matter(post)
-    data.image = getImageForPost(data.slug)
+    // data.image = getImageForPost(data.slug)
     data.date = new Date(data.publishedOn)
     if (includeSource) data.content = marked.parse(content)
     return data
