@@ -59,7 +59,7 @@ export function createFeed(posts: Post[]) {
     feed.addItem({
       title: post.title,
       id: post.url,
-      link: `https://www.laudebugs.me/${post.type}/${post.slug}`,
+      link: `https://www.laudebugs.me/${post.type}${post.type!=='fragments'?'/':'#'}${post.slug}`,
       description: post.summary,
       content: post.content,
       author: [
