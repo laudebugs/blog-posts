@@ -23,7 +23,8 @@ export function getImageForPost(slug: string) {
   const imagesPath = 'assets/'
   const images = fs.readdirSync(imagesPath)
   const image = images.find(_image => _image.includes(slug))
-  return image ?? ''
+  const baseImageUrl = 'https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/'
+  return baseImageUrl + image ?? ''
 }
 
 export type Post = {
