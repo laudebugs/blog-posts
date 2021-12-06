@@ -4,7 +4,10 @@
   "description": "Blog Posts Github Repo",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js",
+    "build": "tsc",
+    "dev": "npx concurrently \"tsc -w\" \"npx nodemon dist/index.js\""
   },
   "repository": {
     "type": "git",
@@ -25,6 +28,8 @@
   },
   "devDependencies": {
     "@types/lodash": "^4.14.177",
-    "@types/marked": "^4.0.1"
+    "@types/marked": "^4.0.1",
+    "concurrently": "^6.4.0",
+    "nodemon": "^2.0.15"
   }
 }

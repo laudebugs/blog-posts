@@ -1,9 +1,15 @@
-const { getFilesFromDir, writeFeed } = require('./helpers/helpers')
+import {getFilesFromDir, writeFeed} from './helpers'
 
-const devPostData = getFilesFromDir('dev', true)
-const journalPostData = getFilesFromDir('journal', true)
-const combinedData = [...devPostData, ...journalPostData]
+export const writeFeeds = async () => {
+    const devPostData = getFilesFromDir('dev', true)
+    const journalPostData = getFilesFromDir('journal', true)
+    const fragmentsData = getFilesFromDir('fragments', true)
+    const combinedData = [...devPostData, ...journalPostData]
 
-writeFeed(devPostData, 'dev')
-writeFeed(journalPostData, 'journal')
-writeFeed(combinedData, 'feed')
+    writeFeed(devPostData, 'dev')
+    writeFeed(journalPostData, 'journal')
+    writeFeed(fragmentsData, 'fragments')
+    
+    writeFeed(combinedData, 'feed')
+}
+
