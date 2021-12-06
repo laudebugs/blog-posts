@@ -59,3 +59,5 @@ jobs:
           git add out
           git commit -m "Updated posts archive"
           git push origin main
+      - name: Trigger deploy 🌻
+        run: curl ${{secrets.SANDSTORM_HOOK}}
