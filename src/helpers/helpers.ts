@@ -59,7 +59,7 @@ export function createFeed(posts: Post[]) {
     feed.addItem({
       title: post.title,
       id: post.url,
-      link: `https://www.laudebugs.me/${post.type}${post.type!=='fragments'?'/':'#'}${post.slug}`,
+      link: `https://www.laudebugs.me/${post.type + post.type!=='fragment'?'':'s'}${post.type!=='fragment'?'/':'#'}${post.slug}`,
       description: post.summary,
       content: post.content,
       author: [
@@ -113,7 +113,7 @@ export function writeFeed(data, fileName) {
       } else {
         console.log(`Successfully Updated ${fileName} Rss Feeds`)
       }
-    },
+    }
   )
 }
 
