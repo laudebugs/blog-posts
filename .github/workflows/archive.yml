@@ -59,5 +59,11 @@ jobs:
           git add out
           git commit -m "Updated posts archive"
           git push origin main
-      - name: Trigger deploy 🌻
-        run: curl ${{secrets.SANDSTORM_HOOK}}
+      - name: Echo updates to Blog 🕊
+        uses: mvasigh/dispatch-action@main
+        with:
+          # You should create a personal access token and store it in your repository
+          token: ${{ secrets.BLOG_POSTS }}
+          repo: sandstorm
+          owner: lbugasu
+          event_type: posts_update
