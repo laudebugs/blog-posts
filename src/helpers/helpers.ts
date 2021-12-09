@@ -59,7 +59,6 @@ export function createFeed(posts: Post[]) {
       content: post.content,
       authors: [author],
       contributor: [author],
- 
     })
   })
 

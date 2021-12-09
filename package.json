@@ -22,7 +22,7 @@
   "dependencies": {
     "@types/node": "^16.11.11",
     "feed": "^4.2.2",
-    "feed-core": "^1.1.1",
+    "feed-core": "^1.1.2",
     "gray-matter": "^4.0.3",
     "lodash": "^4.17.21",
     "marked": "^4.0.6"
