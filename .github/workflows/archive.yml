@@ -43,8 +43,7 @@ jobs:
         run: tsc
       - name: Update Rss Feeds and Archive 🦄
         run: |
-          node dist/feed.js
-          node dist/archive.js
+          node dist/index.js
       - name: Verify Changed files 🐒
         uses: tj-actions/verify-changed-files@v8.3
         id: verify-changed-files
