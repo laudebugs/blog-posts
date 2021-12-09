@@ -35,18 +35,19 @@ export function createFeed(posts: Post[]) {
     description = 'Life and Software Development Blog',
     link = 'https://www.laudebugs.me/api/rss'
   const feed = new RSSFeed(title, description, link)
+  feed.updatedAt = new Date()
   const author = new FeedAuthor('Laurence B. Ininda','lbugasu@gmail.com', 'https://www.laudebugs.me/')
   feed.author = author
-
+  feed.description = 'Bugasu\'s blog where you can read Web Development articles as well as stories, poetry and more'
+  feed.feedImage = 'https://www.laudebugs.me/icons/icon-128x128.png'
 
   let categories: any[]= []
   posts.forEach((post: any) => {
     categories.push(...post.tags)
-    // console.log(post)
     feed.addItem({
       title: post.title,
-      link: `https://www.laudebugs.me/${post.type + (post.type === 'fragment'?  's':'')}/${post.slug}`,
-      description: post.content,
+      link: `https://www.laudebugs.me/${post.type + (post.type === 'fragment'?  's#':'/') + post.slug}`,
+      description: post.summary,
       date: post.date,
       image: {
         url: post.image,
@@ -64,7 +65,7 @@ export function createFeed(posts: Post[]) {
 
   categories = uniq(categories)
   categories.forEach(category => feed.addCategory(category))
-  console.log(feed.generateRSS())
+
   return feed
 }
 
