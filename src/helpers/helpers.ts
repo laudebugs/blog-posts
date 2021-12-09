@@ -77,7 +77,7 @@ export function createFeed(posts: Post[]) {
         }
       ],
       date: new Date(post.publishedOn),
-      image: `https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/${post.image}`
+      image: post.image
     })
   })
 
