@@ -1,10 +1,9 @@
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
-import { Feed } from 'feed'
 import { marked } from 'marked'
 import {uniq} from 'lodash'
-
+import {FeedAuthor, RSSFeed} from 'feed-core'
 export function getFilesFromDir(dir: string, includeSource: boolean) {
   const postsDirectory = path.join(process.cwd(), `${dir}`)
   const filenames = fs.readdirSync(postsDirectory)
@@ -31,59 +30,42 @@ export type Post = {
   [key: string]: any;
 }
 export function createFeed(posts: Post[]) {
-  const feed = new Feed({
-    title: "Lau de Bugs' Blog",
-    description: 'Life and Software Development Blog',
-    id: 'https://www.laudebugs.me/',
-    link: 'https://www.laudebugs.me/api/rss',
-    language: 'en', // optional, used only in RSS 2.0, possible values: http://www.w3.org/TR/REC-html40/struct/dirlang.html#langcodes
-    image: 'https://www.laudebugs.me/images/logos/logo_light.png',
-    favicon: 'https://www.laudebugs.me/favicon.ico',
-    copyright: 'All rights reserved 2021, Lau de Bugs',
-    updated: new Date(), // optional, default = today
-    generator: 'awesome', // optional, default = 'Feed for Node.js'
-    feedLinks: {
-      json: 'https://www.laudebugs.me/api/rss/json',
-      atom: 'https://www.laudebugs.me/api/rss/atom'
-    },
-    author: {
-      name: 'Laurence B. Ininda',
-      email: 'lbugasu@gmail.com',
-      link: 'https://www.laudebugs.me/'
-    }
-  })
+
+  const title = "Lau de Bugs' Blog",
+    description = 'Life and Software Development Blog',
+    link = 'https://www.laudebugs.me/api/rss'
+  const feed = new RSSFeed(title, description, link)
+  const author = new FeedAuthor('Laurence B. Ininda','lbugasu@gmail.com', 'https://www.laudebugs.me/')
+  feed.author = author
+
 
   let categories: any[]= []
   posts.forEach((post: any) => {
     categories.push(...post.tags)
+    // console.log(post)
     feed.addItem({
       title: post.title,
-      id: post.url,
-      link: `https://www.laudebugs.me/${post.type + (post.type!=='fragment'?'':'s')}${post.type!=='fragment'?'/':'#'}${post.slug}`,
-      description: post.summary,
+      link: `https://www.laudebugs.me/${post.type + (post.type === 'fragment'?  's':'')}/${post.slug}`,
+      description: post.content,
+      date: post.date,
+      image: {
+        url: post.image,
+        width: 1280, 
+        height: 720,
+        thumbnail: post.image, 
+        description: post.imageDescription,
+        credit: post.imageCredit
+      },
       content: post.content,
-      author: [
-        {
-          name: 'Laurence B. Ininda',
-          email: 'lbugasu@gmail.com',
-          link: 'https://www.laudebugs.me/'
-        }
-      ],
-      contributor: [
-        {
-          name: 'Laurence B. Ininda',
-          email: 'lbugasu@gmail.com',
-          link: 'https://www.laudebugs.me/'
-        }
-      ],
-      date: new Date(post.publishedOn),
-      image: post.image
+      authors: [author],
+      contributor: [author],
+ 
     })
   })
 
   categories = uniq(categories)
   categories.forEach(category => feed.addCategory(category))
-
+  console.log(feed.generateRSS())
   return feed
 }
 
@@ -99,9 +81,9 @@ export function writeFeed(data, fileName) {
   const feed = createFeed(data)
 
   const feedStore = {
-    rss: feed.rss2(),
-    json: JSON.stringify(feed.json1(), undefined, 4),
-    atom: feed.atom1()
+    rss: feed.generateRSS(),
+    json: '{}',
+    atom: 'feed.atom1()'
   }
   fs.writeFile(
     `out/${fileName}.json`,

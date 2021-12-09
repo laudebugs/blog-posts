@@ -39,7 +39,13 @@ Husky is used to make our commits more cool, and powerful to help development ea
 - [Initialize Husky:](https://typicode.github.io/husky/#/?id=automatic-recommended)
 
   ```bash
-  npx husky-init && yarn
+  # install husky
+  yarn add -D husky
+  #or
+  npm i -D husky
+
+  # initialize
+  npx husky-init
   ```
 
 ## Prettier & EsLint
@@ -75,9 +81,7 @@ If we would like to have our commits automatically format our code on every comm
 3. Initialize EsLint:
 
    ```bash
-   yarn run eslint --init
-   # or
-   npm run eslint --init
+   npx eslint --init
    ```
 
 4. Set up ESLint to work with prettier
@@ -106,6 +110,7 @@ If we would like to have our commits automatically format our code on every comm
    yarn husky set .husky/pre-commit "npx pretty-quick --staged"
    # or
    npm run husky set ./husky/pre-commit "npx pretty-quick --staged"
+   
    ```
 
 > There are more ways to configure your prettier pre-commit hooks [found here](https://prettier.io/docs/en/precommit.html#docsNav).
@@ -155,24 +160,24 @@ Commitizen is a command line interface tool that can be helpful in making commit
 1.  Install the tool
 
     ```bash
-    yarn add -D commitizen
-    # or
-    npm i -D commitizen
+        yarn add -D commitizen
+        # or
+        npm i -D commitizen
     ```
 
 2.  Add a script to the package.json to easily run commitizen:
 
-            ```json
-            //...
-              "scripts": {
-                "commit": "cz"
-              }
-            // ...
-            ```
+    ```json
+        //...
+          "scripts": {
+            "commit": "cz"
+          }
+        // ...
+    ```
 
-        An Example use:
+    An Example use:
 
-        <img src="https://raw.githubusercontent.com/MechanicalHuman/hnp-utilities/master/packages/commitizen-adapter/hero.png">
+    <img src="https://raw.githubusercontent.com/MechanicalHuman/hnp-utilities/master/packages/commitizen-adapter/hero.png">
 
     [source](https://www.npmjs.com/package/@hnp/cz/v/1.0.7)
 
