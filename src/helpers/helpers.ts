@@ -48,6 +48,7 @@ export function createFeed(posts: Post[]) {
       title: post.title,
       link: `https://www.laudebugs.me/${post.type + (post.type === 'fragment'?  's#':'/') + post.slug}`,
       description: post.summary,
+      content: post.content,
       date: post.date,
       image: {
         url: post.image,
@@ -57,9 +58,8 @@ export function createFeed(posts: Post[]) {
         description: post.imageDescription,
         credit: post.imageCredit
       },
-      content: post.content,
       authors: [author],
-      contributor: [author],
+      contributors: [author],
     })
   })
 
