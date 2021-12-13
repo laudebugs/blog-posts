@@ -1,5 +1,26 @@
 [
     {
+        "title": "(6) Months at the Job",
+        "publishedOn": "2021-12-12",
+        "author": "Laurence Ininda",
+        "summary": "",
+        "slug": "six-mois-au-travail",
+        "tags": [
+            "remote",
+            "organization",
+            "work",
+            "career"
+        ],
+        "type": "dev | journal | fragment",
+        "image": "https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/undefined",
+        "imageDescription": "",
+        "imageCredit": "Photo by <a href=\"https://unsplash.com/@teckhonc?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">T.H. Chia</a> on <a href=\"https://unsplash.com/s/photos/unique?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText\">Unsplash</a>",
+        "imageOriginalUrl": "https://unsplash.com/photos/2VETuPPL4wM",
+        "date": "2021-12-12T00:00:00.000Z",
+        "content": "<p>My eyes crack open with fatigue weighing down on them. It&#39;s 8.34 am. I slept through the alarm - or I forgot to set an alarm - or I trusted my body to wake itself before the stand-up. Either way, my sleep over the past weeks has become much more routinely irregular. </p>\n<p>I power on my machine, perhaps spending a minute or two to get my cold brew, swivel on my chair and listen. There&#39;s always someone running the show, and I turn on my editor back to where I&#39;d left over the previous time. </p>\n<p>I&#39;m definitely late for that meeting and assemble my thoughts before I&#39;m picked up to give an update. A few Uhhms as I open my pending PRs. Working on this and that I say - but If I were really stretching myself I could&#39;ve finished all the work in a day or two. I like the &quot;corporate&quot; nature of work sometimes - but I know there&#39;s a temptation to sink into the benignness of getting assigned tasks - and being expected to get into the routine of delivering things on certain timelines. That predictability of what I do at work I have found frustrating - so during my free time, I&#39;ve spent my evenings and nights shipping something of my own - without timelines, without well-known requirements - chipping away at a project one google search after another - since my four year degree taught me how to google somewhat well enough so far. </p>\n<p>And yet - I know there&#39;s plenty of things to learn at times it has felt overwhelming - so I&#39;ve used the projects I&#39;ve been involved in as a guide to learning something new - because it&#39;s not how much I know about something that&#39;s been helpful but rather being flexible and ready to learn. So sometimes I tell my PM or Scrum Master that the implementation doesn&#39;t matter because it&#39;s a learning opportunity for me. I think that&#39;s important for my curiosity - or I&#39;ll get bored changing margins and font-sizes.</p>\n<p>I worked from my bed, from my closet, from my kitchen, from the train, from the airport. This thing I do - isn&#39;t work anymore - at least not in the traditional sense that I&#39;ve seen it. Perhaps it&#39;s the whole work from anywhere that&#39;s erased the boundaries. </p>\n<p>In a sense - there&#39;s always this dance to play — between staying curious and contributing to a vision - even in the smallest of ways. Or else we&#39;d be all trying to get our own things done and not achieve as much as we could together.</p>\n",
+        "no": 21
+    },
+    {
         "title": "Organizing Codebases with Automation Tools",
         "publishedOn": "2021-11-17",
         "author": "Laurence Ininda",
