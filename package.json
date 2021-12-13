@@ -4,7 +4,7 @@
   "description": "Blog Posts Github Repo",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "node src/index.js",
     "build": "tsc",
     "dev": "npx concurrently \"tsc -w\" \"npx nodemon dist/index.js\""
@@ -28,9 +28,14 @@
     "marked": "^4.0.6"
   },
   "devDependencies": {
+    "@types/jest": "^27.0.3",
     "@types/lodash": "^4.14.177",
     "@types/marked": "^4.0.1",
     "concurrently": "^6.4.0",
-    "nodemon": "^2.0.15"
+    "i": "^0.3.7",
+    "jest": "^27.4.4",
+    "nodemon": "^2.0.15",
+    "npm": "^8.3.0",
+    "ts-jest": "^27.1.1"
   }
 }

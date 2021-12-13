@@ -39,7 +39,9 @@ jobs:
           cache: 'npm'
       - name: Install packages 🤖
         run: npm install
-      - name: 'Compile TS files ⚙️'
+      - name: 'Make sure Posts follow Appopriate format 🧪'
+        run: npm run test
+      - name: 'Compile TS files 🎄'
         run: tsc
       - name: Update Rss Feeds and Archive 🦄
         run: |
