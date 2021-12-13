@@ -38,15 +38,15 @@ Husky is used to make our commits more cool, and powerful to help development ea
 
 - [Initialize Husky:](https://typicode.github.io/husky/#/?id=automatic-recommended)
 
-  ```bash
-  # install husky
-  yarn add -D husky
-  #or
-  npm i -D husky
+    ```bash
+    # install husky
+    yarn add -D husky
+    #or
+    npm i -D husky
 
-  # initialize
-  npx husky-init
-  ```
+    # initialize
+    npx husky-init
+    ```
 
 ## Prettier & EsLint
 
@@ -54,17 +54,17 @@ If we would like to have our commits automatically format our code on every comm
 
 1. Add Prettier and eslint to your project:
 
-   ```bash
-     # prettier
-     yarn add prettier --dev
-     # or
-     npm i -D prettier
+    ```bash
+    # prettier
+    yarn add prettier --dev
+    # or
+    npm i -D prettier
 
-     # eslint
-     yarn add eslint --dev
-     # or
-     npm i -D eslint
-   ```
+    # eslint
+    yarn add eslint --dev
+    # or
+    npm i -D eslint
+    ```
 
 2. Add a prettier [config file](https://prettier.io/docs/en/configuration.html) to the repository - named `.prettierrc.json` (or following the [specified format](https://prettier.io/docs/en/configuration.html) for configuration files:
 
@@ -145,13 +145,13 @@ We will also add a husky pre-commit hook that lints our commit messages
    ```
 
 3. Add a husky pre-commit hook config to the package.json
-   ```json
-     "husky": {
-       "hooks": {
-         "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
-       }
-     }
-   ```
+    ```json
+    "husky": {
+      "hooks": {
+        "prepare-commit-msg": "exec < /dev/tty && git cz --hook || true"
+      }
+    }
+    ```
 
 ## [Commitizen](https://github.com/commitizen/cz-cli)
 
@@ -160,19 +160,19 @@ Commitizen is a command line interface tool that can be helpful in making commit
 1.  Install the tool
 
     ```bash
-        yarn add -D commitizen
-        # or
-        npm i -D commitizen
+    yarn add -D commitizen
+    # or
+    npm i -D commitizen
     ```
 
 2.  Add a script to the package.json to easily run commitizen:
 
     ```json
-        //...
-          "scripts": {
-            "commit": "cz"
-          }
-        // ...
+    {
+      "scripts": {
+        "commit": "cz"
+      }
+    }
     ```
 
     An Example use:
@@ -194,7 +194,7 @@ This will assist in generating changelogs automatically from commits:
 
 1. Initialize:
    ```bash
-   npx commitizen init cz-conventional-changelog --save-dev --save-exac
+      npx commitizen init cz-conventional-changelog --save-dev --save-exac
    ```
 
 ## Versioning and Release
@@ -204,30 +204,29 @@ We can use [Standard Version](https://github.com/conventional-changelog/standard
 1.  Install Standard Version
 
     ```bash
-    yarn add --dev standard-version
-    # or
-    npm i --save-dev standard-version
-
+      yarn add --dev standard-version
+      # or
+      npm i --save-dev standard-version
     ```
 
 2.  Add scripts to easily run releases and generate changelogs automaticallly:
 
-        ```json
+    ```json
         {
           "scripts": {
             "release": "standard-version"
           }
         }
-        ```
+    ```
 
     Another option to Standard version is [`semantic-release`](https://github.com/semantic-release/semantic-release)
 
 You can now run your first release by:
 
 ```bash
-npm run release
-# or
-yarn release
+    npm run release
+    # or
+    yarn release
 ```
 
 > Plug: Here is an example of a [changelog for my website](https://www.laudebugs.me/changelog).
@@ -235,7 +234,7 @@ yarn release
 If you create a release - then you can push that release by running:
 
 ```bash
-git push --follow-tags
+    git push --follow-tags
 ```
 
 <hr />
