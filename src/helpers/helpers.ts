@@ -16,6 +16,9 @@ export function getFilesFromDir(dir: string, includeSource: boolean) {
     if (includeSource) data.content = marked.parse(content)
     return data
   })
+  .sort((a, b) => {
+    return b.date - a.date
+  }).reverse()
 }
 
 export function getImageForPost(slug: string) {
@@ -52,9 +55,9 @@ export function createFeed(posts: Post[]) {
       date: post.date,
       image: {
         url: post.image,
-        width: 1280, 
+        width: 1280,
         height: 720,
-        thumbnail: post.image, 
+        thumbnail: post.image,
         description: post.imageDescription,
         credit: post.imageCredit
       },
