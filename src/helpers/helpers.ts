@@ -4,6 +4,7 @@ import matter from 'gray-matter'
 import { marked } from 'marked'
 import {uniq} from 'lodash'
 import {FeedAuthor, RSSFeed} from 'feed-core'
+import { FeedDescriptions } from './descriptions'
 export function getFilesFromDir(dir: string, includeSource: boolean) {
   const postsDirectory = path.join(process.cwd(), `${dir}`)
   const filenames = fs.readdirSync(postsDirectory)
@@ -32,16 +33,21 @@ export function getImageForPost(slug: string) {
 export type Post = {
   [key: string]: any;
 }
-export function createFeed(posts: Post[]) {
+export function createFeed(posts: Post[], section: string) {
 
-  const title = "Lau de Bugs' Blog",
-    description = 'Life and Software Development Blog',
-    link = 'https://www.laudebugs.me/api/rss'
+  let title = "Lau de Bugs' Blog",
+    link = 'https://www.laudebugs.me/api/rss',
+    description = FeedDescriptions.feed
+  if (section){
+    link += `?section=${section}`
+    title = `Lau de Bugs' Blog - ${section}`
+    description = FeedDescriptions[section]
+  }
   const feed = new RSSFeed(title, description, link)
   feed.updatedAt = new Date()
   const author = new FeedAuthor('Laurence B. Ininda','lbugasu@gmail.com', 'https://www.laudebugs.me/')
   feed.author = author
-  feed.description = 'Bugasu\'s blog where you can read Web Development articles as well as stories, poetry and more'
+  feed.description = description
   feed.feedImage = 'https://www.laudebugs.me/icons/icon-128x128.png'
 
   let categories: any[]= []
@@ -72,7 +78,7 @@ export function createFeed(posts: Post[]) {
   return feed
 }
 
-export function writeFeed(data, fileName) {
+export function writeFeed(data, section: string) {
   data.sort((a, b) => b.date - a.date).reverse()
 
   data.map((post, index: number) => {
@@ -81,7 +87,7 @@ export function writeFeed(data, fileName) {
   })
 
   data.sort((a, b) => b.no - a.no)
-  const feed = createFeed(data)
+  const feed = createFeed(data, section)
 
   const feedStore = {
     rss: feed.generateRSS(),
@@ -89,14 +95,14 @@ export function writeFeed(data, fileName) {
     atom: 'feed.atom1()'
   }
   fs.writeFile(
-    `out/${fileName}.json`,
+    `out/${section}.json`,
     JSON.stringify(feedStore, null, 4),
     'utf8',
     err => {
       if (err) {
-        console.log(`Error updating the ${fileName} Rss Feeds: `, err.message)
+        console.log(`Error updating the ${section} Rss Feeds: `, err.message)
       } else {
-        console.log(`Successfully Updated ${fileName} Rss Feeds`)
+        console.log(`Successfully Updated ${section} Rss Feeds`)
       }
     }
   )

@@ -6,10 +6,11 @@ export const writeFeeds = async () => {
     const fragmentsData = getFilesFromDir('fragments', true)
     const combinedData = [...devPostData, ...journalPostData]
 
+
     writeFeed(devPostData, 'dev')
     writeFeed(journalPostData, 'journal')
     writeFeed(fragmentsData, 'fragments')
-    
+
     writeFeed(combinedData, 'feed')
 }
 
