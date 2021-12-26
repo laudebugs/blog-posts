@@ -36,18 +36,21 @@ export type Post = {
 export function createFeed(posts: Post[], section: string) {
 
   let title = "Lau de Bugs' Blog",
-    link = 'https://www.laudebugs.me/api/rss',
-    description = FeedDescriptions.feed
+    rssLink = 'https://www.laudebugs.me/api/rss',
+    description = FeedDescriptions.feed,
+    link='https://laudebugs.me'
   if (section){
-    link += `?section=${section}`
+    rssLink += `?section=${section}`
     title = `Lau de Bugs' Blog - ${section}`
     description = FeedDescriptions[section]
+    link+=`/${section}`
   }
-  const feed = new RSSFeed(title, description, link)
+  const feed = new RSSFeed(title, description, rssLink)
+  feed.link=link
   feed.updatedAt = new Date()
   const author = new FeedAuthor('Laurence B. Ininda','lbugasu@gmail.com', 'https://www.laudebugs.me/')
   feed.author = author
-  feed.description = description
+  feed.description = description 
   feed.feedImage = 'https://www.laudebugs.me/icons/icon-128x128.png'
 
   let categories: any[]= []
