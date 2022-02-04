@@ -1,4 +1,15 @@
-# Dynamic Components in Angular
+---
+title: 'Dynamic Components in Angular'
+publishedOn: '2022-02-07'
+author: Laurence Ininda
+summary: An overview of building and use dynamic components in Angular
+slug: dynamic-components-angular
+tags: ['angular', 'dynamic components']
+type: dev
+imageCredit: 'Photo by <a href="https://unsplash.com/@theshubhamdhage?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Shubham Dhage</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>'
+
+---
+
 
 Angular components can be created (instantiated) at build-time or at run-time. Creating components at run-time (dynamically) is what we are going to look at. 
 
@@ -61,10 +72,9 @@ We can then get a reference to the element with the directive by querying the co
 @ViewChildren(UserProfileDirective, { static: true }) userProfileHosts: QueryList<UserProfileDirective>;
 ```
 
-<aside>
-💡 Note that `@ViewChildren` will return a `QueryList` - that contains a list of of `ViewContainerRef` types. To get elements inside of the `QueryList`, one can use the `QueryList`'s `.length` property together with the `.get` method to get an element at a particular index. For example, for a query list of length 1, we can get the first element by `userProfileHosts.get(0)`. In our example this will return a `ViewContainerRef` that contains a `UserProfileDirective` instance. Documentation on `[@ViewChildren` can be found here](https://angular.io/api/core/ViewChildren).
-
-</aside>
+<Aside>
+Note that `@ViewChildren` will return a `QueryList` - that contains a list of of `ViewContainerRef` types. To get elements inside of the `QueryList`, one can use the `QueryList`'s `.length` property together with the `.get` method to get an element at a particular index. For example, for a query list of length 1, we can get the first element by `userProfileHosts.get(0)`. In our example this will return a `ViewContainerRef` that contains a `UserProfileDirective` instance. Documentation on `[@ViewChildren` can be found here](https://angular.io/api/core/ViewChildren).
+</Aside>
 
 ### Using a Template Variable to target an element as an Anchor
 
@@ -171,15 +181,15 @@ export clase AppComponent extends OnInit, AfterViewInit {
 }
 ```
 
-<aside>
-💡 Notice that we are directly modifying the data of the dynamically created component.😱
+<Aside>
+Notice that we are directly modifying the data of the dynamically created component.😱
 This works, but it becomes problematic when you want to be strict about immutability or uni-directional data flow, and with `QueryLists`, we can’t use this approach since the elements in the `QueryList` are immutable.
 
-</aside>
+</Aside>
 
 We also see another issue with this approach. Since we mutate the data of the dynamic component, Angular’s change detection will throw the `ExpressionChangedAfterItHasBeenCheckedError` warning that you may have encountered before: 
 
-![Untitled](Dynamic%20Components%20in%20Angular%20637b7e01fcc6413b9b68717dbbcc0f92/Untitled.png)
+![Expression Changed After Checked error](https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/expression-changed-after-checked.png)
 
 The reason for this particular case is that angular has detected that we have changed the variable after it was last checked when the dynamically created component’s view was initialized.
 
@@ -244,12 +254,12 @@ constructor(@Inject(USER_TOKEN) public user: IUser) {}
 constructor(@Inject(USER_TOKEN) @Optional() public user: IUser) {}
 ```
 
-<aside>
-💡 It’s interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
+<Aside>
+It’s interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
 
-![Untitled](Dynamic%20Components%20in%20Angular%20637b7e01fcc6413b9b68717dbbcc0f92/Untitled%201.png)
+![Null Injector Token]((https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/null-injector-token.png))
 
-</aside>
+</Aside>
 
 ## Recap
 
