@@ -1,0 +1,15 @@
+Angular components can be created (instantiated) at build-time or at run-time. Creating components at run-time (dynamically) is what we are going to look at. 
+
+To dynamically create a component, we have to decide where we would like to place the component - defining an “anchor point”. We can do this in several ways: 
+
+1. Referencing the host container and inserting the component at a particular index. 
+2. Utilizing a directive ([The Anchor directive](https://angular.io/guide/dynamic-component-loader#the-anchor-directive)) to dynamically place a component at a particular position on an element inside a component
+3. Using an template reference point to place the component at that position in the template
+4. By using Angular’s built in `[NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet) 
+
+We will explore all these methods in depth and how each can be leveraged for a specific use case.
+
+Dynamically creating the component has various benefits that it provides: 
+
+1. We can reference the state of the dynamically created component
+2. Similar to providing context to an angular template through `ngTemplateOutlet`, we can pass in state(data) into the component **(verify/clarify)**
