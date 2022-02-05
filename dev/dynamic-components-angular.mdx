@@ -16,14 +16,14 @@ Angular components can be created (instantiated) at build-time or at run-time. C
 
 Broadly speaking, there are two ways to create dynamic components in Angular:
 
-1. Using a `ViewContainerRef` - that [“represents a container where one or more views can be attached to a component.”](https://angular.io/api/core/ViewContainerRef#viewcontainerref) or
-2. By using Angular’s built in [`NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet)
+1. Using a `ViewContainerRef` - that “represents a container where one or more views can be attached to a component.” or
+2. By using Angular’s built in `NgComponentOutlet` directive
 
 The main focus of this article will be the former, using a `ViewContainerRef` to create dynamic components since the Angular documentation is really clear on the second way - using `NgComponentOutlet`.
 
 # Using `ViewContainerRef`
 
-The `ViewContainerRef` is a class that gets access to a container where other components (host views) using the `createComponent()` method.
+The `ViewContainerRef` is a class that gets access to a container where other components (host views) can be inserted at run time using the `createComponent()` method of the `ViewContainerRef` class.
 
 To dynamically create a component, we have to decide how and where we would like to place the component (the “anchor point”).
 
