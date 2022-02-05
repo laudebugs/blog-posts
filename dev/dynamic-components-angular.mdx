@@ -197,7 +197,7 @@ We also see another issue with this approach. Since we mutate the data of the dy
 
 <div style={{display: 'flex', justifyContent: 'center'}}>
 
-<img width="75%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/expression-changed-after-checked.png"/>
+<img width="60%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/expression-changed-after-checked.png"/>
 
 </div>
 
@@ -205,25 +205,44 @@ The reason for this particular case is that angular has detected that we have ch
 
 Some ways to resolve this is to move our code into the `ngAfterContentInit` life cycle hook or injecting the change detector (`ChangeDetectorRef`) and calling its `detectChanges()` method:
 
-```ts
-// code ommitted
-export class AppComponent implements AfterViewInit{
+1. `ngAfterContentInit`
+    ```ts
+    // code ommitted
+    export class AppComponent implements AfterContentInit{
 
-	/* Inject the ChangeDetectorRef */
-	constructor(cd: ChangeDetectorRef){}
+      /* Inject the ChangeDetectorRef */
+      constructor(cd: ChangeDetectorRef){}
 
-	ngAfterViewInit(){
-		/* Create the component */
-		const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+      /* Implement the AfterContentInit life cycle hook */
+      ngAfterContentInit(){
+        /* Create the component */
+        const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
 
-		/* Pass data to the dynamically created component here. */
-		userProfileComponent.instance.profile = this.userProfile
+        /* Pass data to the dynamically created component here. */
+        userProfileComponent.instance.profile = this.userProfile
+      }
+    }
+    ```
+2. using the `ChangeDetectorRef`
+    ```ts
+      // code ommitted
+      export class AppComponent implements AfterViewInit{
 
-		/*  Tell angular to check for changes */
-		this.cd.detectChanges()
-	}
-}
-```
+        /* Inject the ChangeDetectorRef */
+        constructor(cd: ChangeDetectorRef){}
+
+        ngAfterViewInit(){
+          /* Create the component */
+          const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+
+          /* Pass data to the dynamically created component here. */
+          userProfileComponent.instance.profile = this.userProfile
+
+          /*  Tell angular to check for changes */
+          this.cd.detectChanges()
+        }
+      }
+    ```
 
 The `ViewContainerRef` also provides a way to inject dependencies into our dynamically created component in the options object ([the optional second parameter of the `createComponent` method](https://angular.io/api/core/ViewContainerRef#createcomponent)). The options object contains the following extra parameters (quoted from the Angular docs):
 
@@ -280,7 +299,8 @@ export class AppComponent extends AfterViewInit {
 		      providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
 		      parent: this.injector
 		    });
-		/* Create the component with the injector passed in */
+
+    /* Create the component with the injector passed in */
 		const userProfileComponent =
 		  viewContainerRef.createComponent<UserProfileComponent>(
 		    UserProfileComponent,
@@ -298,7 +318,7 @@ It’s interesting to point out that marking the dependency as optional (using t
 
 <div style={{display: 'flex', justifyContent: 'center'}}>
 
-<img width="75%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/null-injector-token.png"/>
+<img width="60%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/null-injector-token.png"/>
 
 </div>
 
@@ -316,10 +336,17 @@ However you decide to choose where to anchor your components, all these ways are
 
 The `NgComponentOutlet` directive provides a “declarative approach for dynamic component creation” ([quoted from the Angular docs](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)). Here, the documentation is pretty clear on how to use this directive to dynamically create a component.
 
+<Aside>
+
+The example code can be found in the [stackblitz here.](https://stackblitz.com/edit/angular-ivy-lzyecr)
+
+</Aside>
+
 ## Resources and Links
 
 - [Dynamic component loader](https://angular.io/guide/dynamic-component-loader)
 - [ViewContainerRef](https://angular.io/api/core/ViewContainerRef)
 - [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
-- [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
 - [QueryList](https://angular.io/api/core/QueryList)
+- [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
+
