@@ -16,7 +16,7 @@ Angular components can be created (instantiated) at build-time or at run-time. C
 Broadly speaking, there are two ways to create dynamic components in Angular: 
 
 1. Using a `ViewContainerRef` - that [“represents a container where one or more views can be attached to a component.”](https://angular.io/api/core/ViewContainerRef#viewcontainerref) or
-2. By using Angular’s built in `[NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet) 
+2. By using Angular’s built in [`NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet) 
 
 # Using `ViewContainerRef`
 
@@ -36,7 +36,7 @@ To achieve this, we first create the directive and inject the `ViewContainerRef`
 
 Take the scenario where we would like to create a list of user profiles with images for which we would want to display (a simple example that can be achieved with other ways but easy enough to demonstrate with dynamic components)
 
-```tsx
+```ts
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
@@ -64,7 +64,7 @@ When we then create our host component template, we can place this directive on 
 
 We can then get a reference to the element with the directive by querying the component template for the first occurrence of the directive (using `ViewChild` ), or all occurrences of the directive (using `ViewChildren`): 
 
-```tsx
+```ts
 /* Using ViewChild to get the first occurrence */
 @ViewChild(UserProfileDirective, { static: true }) userProfileHost: UserProfileDirective;
 
@@ -101,7 +101,7 @@ In this case, we inject the `ViewContainerRef` into the component:
 
 Taking the `@ViewChild` use case, (the same applies to the `@ViewChildren` case), the view queries are set before the `ngAfterViewInit` life cycle hook is called. We can then create our dynamic components at this point.
 
-```tsx
+```ts
 import { Component, OnDestroy, AfterViewInit, ViewChild, } from '@angular/core';
 
 /* Assume we created this UserProfile component somewhere else */
@@ -118,6 +118,7 @@ import { UserService } from './services/user-service/user.service.ts';
 export clase AppComponent extends OnInit, AfterViewInit {
 	@ViewChild(UserProfileDirective, { static: true }) userProfileHost: UserProfileDirective;
 	userProfile!: {username: string, picture: string}
+
 	constructor(public userService: UserService){}
 
 	ngOnInit(){
@@ -138,7 +139,7 @@ export clase AppComponent extends OnInit, AfterViewInit {
 
 Similar example while using a template reference as an anchor:
 
-```tsx
+```ts
 // ... code ommited
 @Component({
 	selector: 'app-component',
@@ -158,13 +159,11 @@ export clase AppComponent extends OnInit, AfterViewInit {
 
 Similar example using the host element as the anchor: 
 
-```tsx
+```ts
 // ... code ommited
 @Component({
 	selector: 'app-component',
-	template: `
-				<h1> Host element</h1>
-				`,
+	template: `<h1> Host element </h1>`,
 })
 export clase AppComponent extends OnInit, AfterViewInit {
 	
@@ -182,6 +181,7 @@ export clase AppComponent extends OnInit, AfterViewInit {
 ```
 
 <Aside>
+
 Notice that we are directly modifying the data of the dynamically created component.😱
 This works, but it becomes problematic when you want to be strict about immutability or uni-directional data flow, and with `QueryLists`, we can’t use this approach since the elements in the `QueryList` are immutable.
 
@@ -189,13 +189,13 @@ This works, but it becomes problematic when you want to be strict about immutabi
 
 We also see another issue with this approach. Since we mutate the data of the dynamic component, Angular’s change detection will throw the `ExpressionChangedAfterItHasBeenCheckedError` warning that you may have encountered before: 
 
-![Expression Changed After Checked error](https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/expression-changed-after-checked.png)
+<img width="100%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/expression-changed-after-checked.png"/>
 
 The reason for this particular case is that angular has detected that we have changed the variable after it was last checked when the dynamically created component’s view was initialized.
 
 Some ways to resolve this is to move our code into the `ngAfterContentInit` life cycle hook or injecting the change detector (`ChangeDetectorRef`) and calling its `detectChanges()` method: 
 
-```tsx
+```ts
 // code ommitted
 export class AppComponent implements AfterViewInit{
 	
@@ -226,7 +226,7 @@ Things begin to get a little more interesting as we explore this options object 
 
 The `index` parameter allows us to insert a dynamically created component at a particular index. Say we would like to create a second component dynamically and place it at index `0`, then we would do something like: 
 
-```tsx
+```ts
 const userProfileComponent2 = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, {index: 0})
 ```
 
@@ -238,7 +238,7 @@ We can inject dependencies into our dynamic components using the `injector` para
 
 Say, for instance, we want to pass in the user data when we create the component. We can first create an injector token that we can user for that dependency: 
 
-```tsx
+```ts
 import { InjectionToken } from "@angular/core";
 
 export const USER_TOKEN = new InjectionToken<string>('user')
@@ -246,7 +246,7 @@ export const USER_TOKEN = new InjectionToken<string>('user')
 
 In our `user-profile.component.ts` file, we can then pass this dependency as a required dependency, or mark it as an optional dependency in the constructor - if you want to: 
 
-```tsx
+```ts
 // In user-profile.component.ts
 constructor(@Inject(USER_TOKEN) public user: IUser) {}
 
@@ -255,9 +255,11 @@ constructor(@Inject(USER_TOKEN) @Optional() public user: IUser) {}
 ```
 
 <Aside>
+
 It’s interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
 
-![Null Injector Token]((https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/null-injector-token.png))
+<img width="100%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/dynamic-components-angular/null-injector-token.png"/>
+
 
 </Aside>
 
