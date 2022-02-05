@@ -114,9 +114,7 @@ import { UserProfileComponent } from './user-profile/user-profile-component.ts';
 import { UserService } from './services/user-service/user.service.ts';
 @Component({
 	selector: 'app-component',
-	template: `
-				<ng-template userProfileHost></ng-template>
-				`,
+	template: `<ng-template userProfileHost></ng-template>`,
 })
 export clase AppComponent extends OnInit, AfterViewInit {
 	@ViewChild(UserProfileDirective, { static: true }) userProfileHost: UserProfileDirective;
@@ -134,6 +132,7 @@ export clase AppComponent extends OnInit, AfterViewInit {
 
 		// Create the component
 		const userProfileComponent = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+
 		// Pass data to the dynamically created component here.
 		userProfileComponent.instance.profile = this.userProfile
 	}
@@ -151,8 +150,11 @@ Similar example while using a template reference as an anchor:
 				`,
 })
 export clase AppComponent extends OnInit, AfterViewInit {
+
 	@ViewChild('UserProfileEntry', { read: ViewContainerRef}) userProfileEntry: ViewContainerRef
+
 	// ... code ommited
+
 	ngAfterViewInit(){
 		const userProfileComponent = this.userProfileEntry.createComponent<UserProfileComponent>(UserProfileComponent)
 	    userProfileComponent.instance.user = this.userProfile;
@@ -174,6 +176,7 @@ export clase AppComponent extends OnInit, AfterViewInit {
 
 	/* Inject the ViewContainerRef into the component */
 	constructor(public viewContainerRef: ViewContainerRef){}
+
 	ngAfterViewInit(){
 		/* Create the component */
 		const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
@@ -212,8 +215,10 @@ export class AppComponent implements AfterViewInit{
 	ngAfterViewInit(){
 		/* Create the component */
 		const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+
 		/* Pass data to the dynamically created component here. */
 		userProfileComponent.instance.profile = this.userProfile
+
 		/*  Tell angular to check for changes */
 		this.cd.detectChanges()
 	}
@@ -317,3 +322,4 @@ The `NgComponentOutlet` directive provides a “declarative approach for dynamic
 - [ViewContainerRef](https://angular.io/api/core/ViewContainerRef)
 - [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
 - [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
+- [QueryList](https://angular.io/api/core/QueryList)
