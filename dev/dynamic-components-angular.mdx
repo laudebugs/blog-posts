@@ -2,7 +2,7 @@
 title: 'Dynamic Components in Angular'
 publishedOn: '2022-02-07'
 author: Laurence Ininda
-summary: An overview of building and use dynamic components in Angular
+summary: Building dynamic components in Angular can be tricky at times. However, with Dynamic components, we have granular control over how we can generate components in our application and use this feature to our advantage.
 slug: dynamic-components-angular
 tags: ['angular', 'dynamic components']
 type: dev
@@ -18,6 +18,8 @@ Broadly speaking, there are two ways to create dynamic components in Angular:
 
 1. Using a `ViewContainerRef` - that [“represents a container where one or more views can be attached to a component.”](https://angular.io/api/core/ViewContainerRef#viewcontainerref) or
 2. By using Angular’s built in [`NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet)
+
+The main focus of this article will be the former, using a `ViewContainerRef` to create dynamic components since the Angular documentation is really clear on the second way - using `NgComponentOutlet`.
 
 # Using `ViewContainerRef`
 
@@ -60,8 +62,6 @@ When we then create our host component template, we can place this directive on 
 <!-- using ng-container -->
 <ng-container userProfileHost></ng-container>
 ```
-
-**Q: Are all of these valid??**
 
 We can then get a reference to the element with the directive by querying the component template for the first occurrence of the directive (using `ViewChild` ), or all occurrences of the directive (using `ViewChildren`):
 
@@ -192,7 +192,11 @@ This works, but it becomes problematic when you want to be strict about immutabi
 
 We also see another issue with this approach. Since we mutate the data of the dynamic component, Angular’s change detection will throw the `ExpressionChangedAfterItHasBeenCheckedError` warning that you may have encountered before:
 
-<img width="100%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/expression-changed-after-checked.png"/>
+<div style={{display: 'flex', justifyContent: 'center'}}>
+
+<img width="75%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/expression-changed-after-checked.png"/>
+
+</div>
 
 The reason for this particular case is that angular has detected that we have changed the variable after it was last checked when the dynamically created component’s view was initialized.
 
@@ -257,17 +261,59 @@ constructor(@Inject(USER_TOKEN) public user: IUser) {}
 constructor(@Inject(USER_TOKEN) @Optional() public user: IUser) {}
 ```
 
+In our app.component.ts, we would then create an injector and pass it to our component when we create it. Firstly, we provide our token and pass in the value that we would like to be available to the dynamically created component.
+
+```ts
+// ... code ommitted
+export class AppComponent extends AfterViewInit {
+	constructor(public injector: Injector){}
+	// code ommited
+	ngAfterViewInit(){
+
+		/* Create the injector to be passed to the component and provide the value */
+		const injector = Injector.create({
+		      providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
+		      parent: this.injector
+		    });
+		/* Create the component with the injector passed in */
+		const userProfileComponent =
+		  viewContainerRef.createComponent<UserProfileComponent>(
+		    UserProfileComponent,
+		    { index: 0, injector: injector }
+		  );
+	}
+
+}
+```
+
+
 <Aside>
 
 It’s interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
 
-<img width="100%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/null-injector-token.png"/>
+<div style={{display: 'flex', justifyContent: 'center'}}>
 
+<img width="75%" src="https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/_/null-injector-token.png"/>
+
+</div>
 
 </Aside>
+
+## Noteworthy
+
+In previous versions of Angular, Dynamically created components had to be added to the `entryComponents` of the `NgModule` in which they are to be imported. With Ivy, this is no longer a requirement and they can be imported the same way as other components. [You can read more about it here.](https://angular.io/guide/deprecations#entrycomponents-and-analyze_for_entry_components-no-longer-required)
 
 ## Recap
 
 However you decide to choose where to anchor your components, all these ways are valid and can go far in and of themselves. One advantage of dynamically generating the component using the `ViewContainerRef` is that you have access to the current state of the newly created component and can leverage it for your particular use case.
 
 # `NgComponentOutlet`
+
+The `NgComponentOutlet` directive provides a “declarative approach for dynamic component creation” ([quoted from the Angular docs](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)). Here, the documentation is pretty clear on how to use this directive to dynamically create a component.
+
+## Resources and Links
+
+- [Dynamic component loader](https://angular.io/guide/dynamic-component-loader)
+- [ViewContainerRef](https://angular.io/api/core/ViewContainerRef)
+- [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
+- [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
