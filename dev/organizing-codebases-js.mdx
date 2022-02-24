@@ -40,9 +40,7 @@ Husky is used to make our commits more cool, and powerful to help development ea
 
     ```bash
     # install husky
-    yarn add -D husky
-    #or
-    npm i -D husky
+    npm install -D husky
 
     # initialize
     npx husky-init
@@ -56,14 +54,10 @@ If we would like to have our commits automatically format our code on every comm
 
     ```bash
     # prettier
-    yarn add prettier --dev
-    # or
-    npm i -D prettier
+    npm install -D prettier
 
     # eslint
-    yarn add eslint --dev
-    # or
-    npm i -D eslint
+    npm install -D eslint
     ```
 
 2. Add a prettier [config file](https://prettier.io/docs/en/configuration.html) to the repository - named `.prettierrc.json` (or following the [specified format](https://prettier.io/docs/en/configuration.html) for configuration files:
@@ -100,16 +94,12 @@ If we would like to have our commits automatically format our code on every comm
 
    Now, you can specify prettier rules to work with your linter and not have both ESLint and Prettier enforcing different styles
 
-5. Add [Prettier Pre-commit Hook](https://prettier.io/docs/en/precommit.html#docsNav):
+5. Add [Prettier Pre-commit Hook](https://prettier.io/docs/en/precommit.html#option-2-pretty-quickhttpsgithubcomazzpretty-quick):
 
    ```bash
-   yarn add --dev pretty-quick
-   # or
-   npm i -D pretty-quick
+    npm install -D pretty-quick
 
-   yarn husky set .husky/pre-commit "npx pretty-quick --staged"
-   # or
-   npm run husky set ./husky/pre-commit "npx pretty-quick --staged"
+    npx husky set ./husky/pre-commit "npx pretty-quick --staged"
 
    ```
 
@@ -123,10 +113,7 @@ We will also add a husky pre-commit hook that lints our commit messages
 1. [Install Commitlint](https://github.com/conventional-changelog/commitlint#getting-started)
 
    ```bash
-   # Install commitlint cli and conventional config
-   yarn add --dev @commitlint/{config-conventional,cli}
-   # For Windows:
-   yarn add --dev @commitlint/config-conventional @commitlint/cli
+   npm install -D @commitlint/config-conventional @commitlint/cli
 
    # Configure commitlint to use conventional config
    echo "module.exports = {extends: ['@commitlint/config-conventional']}" > commitlint.config.js
@@ -135,11 +122,6 @@ We will also add a husky pre-commit hook that lints our commit messages
 2. . Add the commitlint hooks:
 
    ```bash
-   # Install Husky v6
-   npm install husky --save-dev
-   # or
-   yarn add husky --dev
-
    # Add hook
    npx husky add .husky/commit-msg 'npx --no -- commitlint --edit "$1"'
    ```
@@ -160,9 +142,7 @@ Commitizen is a command line interface tool that can be helpful in making commit
 1.  Install the tool
 
     ```bash
-    yarn add -D commitizen
-    # or
-    npm i -D commitizen
+    npm install -D commitizen
     ```
 
 2.  Add a script to the package.json to easily run commitizen:
@@ -194,7 +174,7 @@ This will assist in generating changelogs automatically from commits:
 
 1. Initialize:
    ```bash
-      npx commitizen init cz-conventional-changelog --save-dev --save-exac
+      npx commitizen init cz-conventional-changelog -D --save-exac
    ```
 
 ## Versioning and Release
@@ -204,9 +184,7 @@ We can use [Standard Version](https://github.com/conventional-changelog/standard
 1.  Install Standard Version
 
     ```bash
-      yarn add --dev standard-version
-      # or
-      npm i --save-dev standard-version
+      npm install -D standard-version
     ```
 
 2.  Add scripts to easily run releases and generate changelogs automaticallly:
