@@ -19,8 +19,6 @@ imageOriginalUrl: 'https://unsplash.com/photos/MZ0zABL7Bwo'
 
 <br />
 
-<Note>I'll provide commands for both yarn and npm package managers.</Note>
-
 ## Tools Mentioned in this guide
 
 - [Husky](https://typicode.github.io/husky/#/)
@@ -96,12 +94,12 @@ If we would like to have our commits automatically format our code on every comm
 
 5. Add [Prettier Pre-commit Hook](https://prettier.io/docs/en/precommit.html#option-2-pretty-quickhttpsgithubcomazzpretty-quick):
 
-   ```bash
+    ```bash
     npm install -D pretty-quick
 
     npx husky set ./husky/pre-commit "npx pretty-quick --staged"
 
-   ```
+    ```
 
 > There are more ways to configure your prettier pre-commit hooks [found here](https://prettier.io/docs/en/precommit.html#docsNav).
 
@@ -173,9 +171,9 @@ You can customize the fields available in your commitizen CLI by <a href="https:
 This will assist in generating changelogs automatically from commits:
 
 1. Initialize:
-   ```bash
-      npx commitizen init cz-conventional-changelog -D --save-exac
-   ```
+    ```bash
+    npx commitizen init cz-conventional-changelog -D --save-exac
+    ```
 
 ## Versioning and Release
 
@@ -184,17 +182,17 @@ We can use [Standard Version](https://github.com/conventional-changelog/standard
 1.  Install Standard Version
 
     ```bash
-      npm install -D standard-version
+    npm install -D standard-version
     ```
 
 2.  Add scripts to easily run releases and generate changelogs automaticallly:
 
     ```json
-        {
-          "scripts": {
-            "release": "standard-version"
-          }
-        }
+    {
+      "scripts": {
+        "release": "standard-version"
+      }
+    }
     ```
 
     Another option to Standard version is [`semantic-release`](https://github.com/semantic-release/semantic-release)
@@ -202,9 +200,7 @@ We can use [Standard Version](https://github.com/conventional-changelog/standard
 You can now run your first release by:
 
 ```bash
-    npm run release
-    # or
-    yarn release
+npm run release
 ```
 
 > Plug: Here is an example of a [changelog for my website](https://www.laudebugs.me/changelog).
@@ -212,7 +208,7 @@ You can now run your first release by:
 If you create a release - then you can push that release by running:
 
 ```bash
-    git push --follow-tags
+git push --follow-tags
 ```
 
 <hr />
