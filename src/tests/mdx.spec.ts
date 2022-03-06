@@ -4,8 +4,9 @@ import { getFilesFromDir, getImageForPost } from "../helpers"
 const devPostData = getFilesFromDir('dev', true)
 const journalPostData = getFilesFromDir('journal', true)
 const fragmentPostData = getFilesFromDir('fragments', true)
+const cuisinePostData = getFilesFromDir('cuisine', true)
 
-const combinedPosts = [...devPostData, ...journalPostData, ...fragmentPostData]
+const combinedPosts = [...devPostData, ...journalPostData, ...fragmentPostData, ...cuisinePostData]
 
 
 combinedPosts.forEach(post => {
