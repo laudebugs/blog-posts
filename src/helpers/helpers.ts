@@ -5,13 +5,17 @@ import { marked } from 'marked'
 import {uniq} from 'lodash'
 import {FeedAuthor, RSSFeed} from 'feed-core'
 import { FeedDescriptions } from './descriptions'
+
 export function getFilesFromDir(dir: string, includeSource: boolean) {
   const postsDirectory = path.join(process.cwd(), `${dir}`)
   const filenames = fs.readdirSync(postsDirectory)
-  return filenames.map(filename => {
+  return filenames
+    .filter((filename)=>/^(?!_).+.mdx/gm.test(filename))
+    .map(filename => {
     const fullPath = path.join(process.cwd(), `${dir}/`, filename)
     const post = fs.readFileSync(fullPath, 'utf-8')
     const { data, content } = matter(post)
+    
     data.image = getImageForPost(data.slug)
     data.date = new Date(data.publishedOn)
     if (includeSource) data.content = marked.parse(content)

@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Banana Cookies",
+        "slug": "banana-cookies",
+        "category": "dessert",
+        "tags": [
+            "baking"
+        ],
+        "ingredients": [
+            "1 cup chopped walnuts",
+            "8 tablespoons (1 stick) unsalted butter",
+            "1 cup all-purpose flour",
+            "1 cup whole-wheat flour",
+            "1 teaspoon kosher salt",
+            "3/4 teaspoon ground cinnamon",
+            "1/2 teaspoon baking soda",
+            "1/4 teaspoon freshly ground nutmeg",
+            "1 medium ripe banana",
+            "1 large egg, cold from the refrigerator",
+            "1/2 cup granulated sugar",
+            "1/2 cup packed light or dark brown sugar",
+            "2 teaspoons vanilla extract"
+        ], 
+        "recipeUrl": "https://www.thekitchn.com/banana-cookies-recipe-23280982"
+    }
+]
