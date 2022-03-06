@@ -1,5 +1,19 @@
 [
     {
+        "title": "Rough Edges",
+        "publishedOn": "2022-03-05",
+        "author": "Laurence Ininda",
+        "summary": "Warm and surprisingly simple to make.",
+        "slug": "rough-edges",
+        "tags": [],
+        "type": "cuisine",
+        "recipe": "banana-cookies",
+        "caption": "Nutty, with cinnamon hints and banana notes",
+        "image": "https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/rough-edges.jpeg",
+        "date": "2022-03-05T00:00:00.000Z",
+        "no": 24
+    },
+    {
         "title": "Dynamic Components in Angular",
         "publishedOn": "2022-02-07",
         "author": "Laurence Ininda",
