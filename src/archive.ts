@@ -4,9 +4,9 @@ import {getFilesFromDir} from './helpers'
 export const writeToArchive = () =>{
   const devPostData = getFilesFromDir('dev', false)
   const journalPostData = getFilesFromDir('journal', false)
-  const cuisinePostData = getFilesFromDir('cuisine', false)
+  // const cuisinePostData = getFilesFromDir('cuisine', false)
   
-  let combinedData = [...devPostData, ...journalPostData, ...cuisinePostData]
+  let combinedData = [...devPostData, ...journalPostData]
   
   combinedData = combinedData
     .sort((a, b) => {
