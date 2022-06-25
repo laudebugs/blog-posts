@@ -15,7 +15,7 @@ export function getFilesFromDir(dir: string, includeSource: boolean) {
     const fullPath = path.join(process.cwd(), `${dir}/`, filename)
     const post = fs.readFileSync(fullPath, 'utf-8')
     const { data, content } = matter(post)
-    
+
     data.image = getImageForPost(data.slug)
     data.date = new Date(data.publishedOn)
     if (includeSource) data.content = marked.parse(content)
@@ -30,7 +30,7 @@ export function getImageForPost(slug: string) {
   const imagesPath = 'assets/'
   const images = fs.readdirSync(imagesPath)
   const image = images.find(_image => _image.includes(slug))
-  const baseImageUrl = 'https://raw.githubusercontent.com/lbugasu/blog-posts/main/assets/'
+  const baseImageUrl = 'https://raw.githubusercontent.com/laudebugs/blog-posts/main/assets/'
   return baseImageUrl + image ?? ''
 }
 
@@ -52,9 +52,9 @@ export function createFeed(posts: Post[], section: string) {
   const feed = new RSSFeed(title, description, rssLink)
   feed.link=link
   feed.updatedAt = new Date()
-  const author = new FeedAuthor('Laurence B. Ininda','lbugasu@gmail.com', 'https://www.laudebugs.me/')
+  const author = new FeedAuthor('Laurence B. Ininda','laudebugs@gmail.com', 'https://www.laudebugs.me/')
   feed.author = author
-  feed.description = description 
+  feed.description = description
   feed.feedImage = 'https://www.laudebugs.me/icons/icon-128x128.png'
 
   let categories: any[]= []

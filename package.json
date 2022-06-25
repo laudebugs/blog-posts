@@ -12,14 +12,14 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/lbugasu/blog-posts.git"
+        "url": "git+https://github.com/laudebugs/blog-posts.git"
     },
     "author": "",
     "license": "ISC",
     "bugs": {
-        "url": "https://github.com/lbugasu/blog-posts/issues"
+        "url": "https://github.com/laudebugs/blog-posts/issues"
     },
-    "homepage": "https://github.com/lbugasu/blog-posts#readme",
+    "homepage": "https://github.com/laudebugs/blog-posts#readme",
     "dependencies": {
         "@types/node": "^16.11.11",
         "feed": "^4.2.2",
