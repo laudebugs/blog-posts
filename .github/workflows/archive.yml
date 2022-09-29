@@ -42,7 +42,7 @@ jobs:
       - name: 'Make sure Posts follow Appopriate format 🧪'
         run: npm run test
       - name: 'Compile TS files 🎄'
-        run: tsc
+        run: npm run build
       - name: Update Rss Feeds and Archive 🦄
         run: |
           node dist/index.js
