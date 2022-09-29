@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { getFilesFromDir } from './helpers'
+import { getLastCommitDate } from './helpers/get-last-commit-date'
 
 export const writeToArchive = () => {
     const devPostData = getFilesFromDir('dev', false)
@@ -16,6 +17,7 @@ export const writeToArchive = () => {
 
     combinedData = combinedData.map((post, index) => {
         post.no = index + 1
+        post.lastModified = getLastCommitDate(post.type, post.slug)
         return post
     })
 
