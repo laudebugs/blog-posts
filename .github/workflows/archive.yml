@@ -15,6 +15,9 @@ jobs:
     steps:
       - name: 'Checkout 🧞'
         uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
+      - run: git fetch
       - uses: oleksiyrudenko/gha-git-credentials@v2-latest
         with:
           token: '${{ secrets.BLOG_POSTS }}'
