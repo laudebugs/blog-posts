@@ -35,7 +35,7 @@ export function consume<T>(consumer: BehaviorSubject<T>, fallback$: Observable<T
 }
 ```
 
-The operator above is written in the form of [a curried function](https://javascript.info/currying-partials), that accepts two initial inputs: `consumer` - which in this case was a behavior subject that stored the incoming data, and `fallback$` which is the data to return in case an error happens. If no error happens, the `captureError` pipe isn’t called. In all cases, either the initial data or the fallback data is passed on to the consuming [Behavior Subject.](https://rxjs.dev/api/index/class/BehaviorSubject)
+The operator above is written in the form of [a curried function](https://javascript.info/currying-partials), that accepts two initial inputs: `consumer` - which in this case was a behavior subject that stores the current value in the observable stream, and `fallback$` which is the data to return in case an error happens. If no error happens, the `captureError` rxjs operator isn't called. In all cases, either the data from the observable stream or the fallback data is passed on to the consuming [behavior Subject.](https://rxjs.dev/api/index/class/BehaviorSubject)
 
 And there we have it! Our own custom RxJS operator 🧞‍♂️
 
