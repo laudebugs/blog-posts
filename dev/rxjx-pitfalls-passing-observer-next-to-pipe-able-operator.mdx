@@ -12,7 +12,15 @@ imageCredit: 'Photo by <a href="https://unsplash.com/@fakurian?utm_source=unspla
 imageOriginalUrl: 'https://unsplash.com/photos/E8Ufcyxz514'
 ---
 
-Passing `Subject.next` as the `next` parameter where an `Observer` is required.
+When working with observable streams, often one uses `RxJs` operators to pipe into the stream (i.e. using [pipe-able operators](https://rxjs.dev/guide/operators)). Some of these operators take observers as an argument. An observer is an object that consumes values delivered by an observable and often implements one or more of the `next`, `error` and `complete` functions.
+
+The RxJs `Subject` is a type of observable that is also an observer. A common pattern I find myself implementing in several projects is defining a `Subject`, often also a `BehaviorSubject` which then holds different pieces of data to be consumed in differnt parts of an application. In order to pass data to the `Subject`, which is also an observer, we call the `.next` with the data the Subject should hold. A simple example would be while using the `tap` operator to perform side effects in our observable stream.
+
+A common pitfall is then passing `Subject.next` directly as the argument to a pipeable operator. For instance, when using `tap`, calling `tap(new Subject().next)`.
+We will see how this can cause unexpected errors that are may be hard to debug and how to avoid it.
+
+---
+
 Suppose you have an RxJs subject that is keeping track of the value in an observable stream (say called `stream$`).
 
 ```tsx
@@ -116,3 +124,4 @@ Happy hacking!
 
 -   [MDN references on `Function.prototype.bind()`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind)
 -   [RxJs `tap` operator](https://rxjs.dev/api/operators/tap)
+-   [RxJs Operators](https://rxjs.dev/guide/operators)
