@@ -73,7 +73,8 @@ stream$.pipe(tap<number>(observerStore.next)).subscribe()
 The implementation above would also give us an error: `TypeError: Cannot read properties of undefined (reading 'push')`. For the same reason that the `this` reference would refer to the `global` object and not the `observerStore` object.
 
 <Aside>
-💡 It's worth noting that if the observer's `next` implementation does not reference the `this` keyword, then passing in the `.next` function would work as expected.
+
+It's worth noting that if the observer's `next` implementation does not reference the `this` keyword, then passing in the `.next` function would work as expected.
 
 </Aside>
 
