@@ -73,5 +73,5 @@ jobs:
           event_type: posts_update
           message: |
               {
-                "commit_sha": ${{GITHUB_REF#refs/heads/}}
+                "commit_sha": ${{ github.sha }}
               }
