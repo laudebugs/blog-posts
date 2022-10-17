@@ -1,6 +1,6 @@
 ---
-title: 'RxJs Pitfalls: Passing in a Observer's next function as a callback to pipe operators'
-publishedOn: '2022-10-18'
+title: "RxJs Pitfalls: Passing in a Observer's next function as a callback to pipe operators"
+publishedOn: '2022-10-17'
 author: Laurence Ininda
 summary: 'When using RxJs operators, you can pass in a callback function as the next function of an Observer. A common pitfall is to pass in the next function of an Observer as a callback to an RxJs operator. This post explains why this may be a bad idea causing errors that may be hard to debug and how to avoid it.'
 slug: 'rxjx-pitfalls-passing-observer-next-to-pipe-able-operator'
@@ -45,7 +45,7 @@ const _count = new Subject<number>()
 stream$.pipe(tap<number>(_count.next)).subscribe()
 ```
 
-However, you'll notice that the above implementation ******\*\*******does not work******\*\*******, resulting in the error: `TypeError: _this._throwIfClosed is not a function`.
+However, you'll notice that the above implementation **\*\***\*\***\*\***does not work**\*\***\*\***\*\***, resulting in the error: `TypeError: _this._throwIfClosed is not a function`.
 
 The reason being that RxJs's `Subject` is a class whose `next` implementation relies on `this` keyword which refers to the `_count` instance. You can [view the source code here](https://github.com/ReactiveX/rxjs/blob/8.x/src/internal/Subject.ts#L60). Passing just the `_count.next` function would reference `this` which refers to the global scope and not the `_count` instance.
 
