@@ -8,16 +8,14 @@ tags: ['angular', 'dynamic components']
 type: dev
 image: ''
 imageCredit: 'Photo by <a href="https://unsplash.com/@theshubhamdhage?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Shubham Dhage</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>'
-
 ---
-
 
 Angular components can be created (instantiated) at build-time or at run-time. Creating components at run-time (dynamically) is what we are going to look at.
 
 Broadly speaking, there are two ways to create dynamic components in Angular:
 
 1. Using a `ViewContainerRef` - that “represents a container where one or more views can be attached to a component.” or
-2. By using Angular’s built in `NgComponentOutlet` directive
+2. By using Angular's built in `NgComponentOutlet` directive
 
 The main focus of this article will be the former, using a `ViewContainerRef` to create dynamic components since the Angular documentation is really clear on the second way - using `NgComponentOutlet`.
 
@@ -40,17 +38,17 @@ To achieve this, we first create the directive and inject the `ViewContainerRef`
 Take the scenario where we would like to create a list of user profiles with images for which we would want to display (a simple example that can be achieved with other ways but easy enough to demonstrate with dynamic components)
 
 ```ts
-import { Directive, ViewContainerRef } from '@angular/core';
+import { Directive, ViewContainerRef } from '@angular/core'
 
 @Directive({
-  selector: '[userProfileHost]',
+    selector: '[userProfileHost]',
 })
-export class UserProfileDirective{
-  constructor(public viewContainerRef: ViewContainerRef) { }
+export class UserProfileDirective {
+    constructor(public viewContainerRef: ViewContainerRef) {}
 }
 ```
 
-When we then create our host component template, we can place this directive on an element such as a `div` or using angular’s `ng-template` or `ng-container`.
+When we then create our host component template, we can place this directive on an element such as a `div` or using angular's `ng-template` or `ng-container`.
 
 ```html
 <!-- using an html element -->
@@ -96,7 +94,7 @@ One can target an element to act as a host for our dynamic component by using a 
 
 ### The Host View as the Anchor
 
-We can use the host view (the component in which we will create the dynamic component) as an anchor for the newly created component. In this case, the created components would be appended at the end of the DOM tree. This works if we know that we don’t have to insert the newly created elements before other elements that were generated at build time.
+We can use the host view (the component in which we will create the dynamic component) as an anchor for the newly created component. In this case, the created components would be appended at the end of the DOM tree. This works if we know that we don't have to insert the newly created elements before other elements that were generated at build time.
 
 In this case, we inject the `ViewContainerRef` into the component:
 
@@ -189,79 +187,83 @@ export clase AppComponent extends OnInit, AfterViewInit {
 <Aside>
 
 Notice that we are directly modifying the data of the dynamically created component.😱
-This works, but it becomes problematic when you want to be strict about immutability or uni-directional data flow, and with `QueryLists`, we can’t use this approach since the elements in the `QueryList` are immutable.
+This works, but it becomes problematic when you want to be strict about immutability or uni-directional data flow, and with `QueryLists`, we can't use this approach since the elements in the `QueryList` are immutable.
 
 </Aside>
 
-We also see another issue with this approach. Since we mutate the data of the dynamic component, Angular’s change detection will throw the `ExpressionChangedAfterItHasBeenCheckedError` warning that you may have encountered before:
+We also see another issue with this approach. Since we mutate the data of the dynamic component, Angular's change detection will throw the `ExpressionChangedAfterItHasBeenCheckedError` warning that you may have encountered before:
 
 <div style={{display: 'flex', justifyContent: 'center'}}>
 
-<img width="80%" src="https://raw.githubusercontent.com/laudebugs/blog-posts/main/assets/_/expression-changed-after-checked.png"/>
+<img
+    width="80%"
+    src="https://raw.githubusercontent.com/laudebugs/blog-posts/main/assets/_/expression-changed-after-checked.png"
+/>
 
 </div>
 
-The reason for this particular case is that angular has detected that we have changed the variable after it was last checked when the dynamically created component’s view was initialized.
+The reason for this particular case is that angular has detected that we have changed the variable after it was last checked when the dynamically created component's view was initialized.
 
 Some ways to resolve this is to move our code into the `ngAfterContentInit` life cycle hook or injecting the change detector (`ChangeDetectorRef`) and calling its `detectChanges()` method:
 
 1. `ngAfterContentInit`
+
     ```ts
     // code ommitted
-    export class AppComponent implements AfterContentInit{
+    export class AppComponent implements AfterContentInit {
+        /* Inject the ChangeDetectorRef */
+        constructor(cd: ChangeDetectorRef) {}
 
-      /* Inject the ChangeDetectorRef */
-      constructor(cd: ChangeDetectorRef){}
+        /* Implement the AfterContentInit life cycle hook */
+        ngAfterContentInit() {
+            /* Create the component */
+            const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
 
-      /* Implement the AfterContentInit life cycle hook */
-      ngAfterContentInit(){
-        /* Create the component */
-        const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
-
-        /* Pass data to the dynamically created component here. */
-        userProfileComponent.instance.profile = this.userProfile
-      }
+            /* Pass data to the dynamically created component here. */
+            userProfileComponent.instance.profile = this.userProfile
+        }
     }
     ```
+
 2. using the `ChangeDetectorRef`
+
     ```ts
-      // code ommitted
-      export class AppComponent implements AfterViewInit{
-
+    // code ommitted
+    export class AppComponent implements AfterViewInit {
         /* Inject the ChangeDetectorRef */
-        constructor(cd: ChangeDetectorRef){}
+        constructor(cd: ChangeDetectorRef) {}
 
-        ngAfterViewInit(){
-          /* Create the component */
-          const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+        ngAfterViewInit() {
+            /* Create the component */
+            const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
 
-          /* Pass data to the dynamically created component here. */
-          userProfileComponent.instance.profile = this.userProfile
+            /* Pass data to the dynamically created component here. */
+            userProfileComponent.instance.profile = this.userProfile
 
-          /*  Tell angular to check for changes */
-          this.cd.detectChanges()
+            /*  Tell angular to check for changes */
+            this.cd.detectChanges()
         }
-      }
+    }
     ```
 
 The `ViewContainerRef` also provides a way to inject dependencies into our dynamically created component in the options object ([the optional second parameter of the `createComponent` method](https://angular.io/api/core/ViewContainerRef#createcomponent)). The options object contains the following extra parameters (quoted from the Angular docs):
 
-- `index` - the index at which to insert the new components host view
-- `injector` - the injector to use as the parent for the new component
-- `ngModuleRef` - an ngModuleRef of the component’s `NgModule`
-- `projectableNodes` - list of Dom nodes that should be projected though `ng-content`
+-   `index` - the index at which to insert the new components host view
+-   `injector` - the injector to use as the parent for the new component
+-   `ngModuleRef` - an ngModuleRef of the component's `NgModule`
+-   `projectableNodes` - list of Dom nodes that should be projected though `ng-content`
 
-Things begin to get a little more interesting as we explore this options object and how it expands our flexibility with dynamically created components. We’ll explore the first two for now (`index` and `injector`.
+Things begin to get a little more interesting as we explore this options object and how it expands our flexibility with dynamically created components. We'll explore the first two for now (`index` and `injector`.
 
 ### `index`
 
 The `index` parameter allows us to insert a dynamically created component at a particular index. Say we would like to create a second component dynamically and place it at index `0`, then we would do something like:
 
 ```ts
-const userProfileComponent2 = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, {index: 0})
+const userProfileComponent2 = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, { index: 0 })
 ```
 
-Of course, we can’t place an element at index `1` if the length of dynamically created components in the `ViewContainerRef` is `0`.
+Of course, we can't place an element at index `1` if the length of dynamically created components in the `ViewContainerRef` is `0`.
 
 ### `injector`
 
@@ -270,7 +272,7 @@ We can inject dependencies into our dynamic components using the `injector` para
 Say, for instance, we want to pass in the user data when we create the component. We can first create an injector token that we can user for that dependency:
 
 ```ts
-import { InjectionToken } from "@angular/core";
+import { InjectionToken } from '@angular/core'
 
 export const USER_TOKEN = new InjectionToken<string>('user')
 ```
@@ -290,35 +292,31 @@ In our app.component.ts, we would then create an injector and pass it to our com
 ```ts
 // ... code ommitted
 export class AppComponent extends AfterViewInit {
-	constructor(public injector: Injector){}
-	// code ommited
-	ngAfterViewInit(){
+    constructor(public injector: Injector) {}
+    // code ommited
+    ngAfterViewInit() {
+        /* Create the injector to be passed to the component and provide the value */
+        const injector = Injector.create({
+            providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
+            parent: this.injector,
+        })
 
-		/* Create the injector to be passed to the component and provide the value */
-		const injector = Injector.create({
-		      providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
-		      parent: this.injector
-		    });
-
-    /* Create the component with the injector passed in */
-		const userProfileComponent =
-		  viewContainerRef.createComponent<UserProfileComponent>(
-		    UserProfileComponent,
-		    { index: 0, injector: injector }
-		  );
-	}
-
+        /* Create the component with the injector passed in */
+        const userProfileComponent = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, {
+            index: 0,
+            injector: injector,
+        })
+    }
 }
 ```
 
-
 <Aside>
 
-It’s interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
+It's interesting to point out that marking the dependency as optional (using the `@Optional()` decorator) means that we can leave it out when creating the dynamic component. Otherwise, we would run into a null injector error when we call `createComponent` (`R3InjectorError`):
 
 <div style={{display: 'flex', justifyContent: 'center'}}>
 
-<img width="80%" src="https://raw.githubusercontent.com/laudebugs/blog-posts/main/assets/_/null-injector-token.png"/>
+<img width="80%" src="https://raw.githubusercontent.com/laudebugs/blog-posts/main/assets/_/null-injector-token.png" />
 
 </div>
 
@@ -344,9 +342,8 @@ The example code can be found in the [stackblitz here.](https://stackblitz.com/e
 
 ## Resources and Links
 
-- [Dynamic component loader](https://angular.io/guide/dynamic-component-loader)
-- [ViewContainerRef](https://angular.io/api/core/ViewContainerRef)
-- [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
-- [QueryList](https://angular.io/api/core/QueryList)
-- [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
-
+-   [Dynamic component loader](https://angular.io/guide/dynamic-component-loader)
+-   [ViewContainerRef](https://angular.io/api/core/ViewContainerRef)
+-   [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
+-   [QueryList](https://angular.io/api/core/QueryList)
+-   [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)

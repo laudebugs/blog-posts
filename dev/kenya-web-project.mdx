@@ -12,7 +12,7 @@ imageCredit: 'Photo by <a href="https://unsplash.com/@joecalih?utm_source=unspla
 
 ## Foreground
 
-The internet is a vast “land” with plenty of room to create, share and find content. Internet usage in Kenya is increasing by the year. COVID-19 brought to the forefront, the importance of having an online presence. Companies like Amazon, that were internet-first, widened their market share of internet sales and became more relevant. Those companies that didn’t have an online presence realized that they needed to adapt quickly to the times. Even people realized that they needed to build an online presence to showcase their work or seek jobs.
+The internet is a vast “land” with plenty of room to create, share and find content. Internet usage in Kenya is increasing by the year. COVID-19 brought to the forefront, the importance of having an online presence. Companies like Amazon, that were internet-first, widened their market share of internet sales and became more relevant. Those companies that didn't have an online presence realized that they needed to adapt quickly to the times. Even people realized that they needed to build an online presence to showcase their work or seek jobs.
 
 In developing countries like Kenya, with companies shifting online, there is a growing need to track these trends. However, data is still expensive for the average Kenyan even though data consumption in the country has been increasing by the year. Therefor, in as much as companies are moving online, they need to take into consideration this very fact that accessing websites should not require a large amount of data – say more than 2MB (to be revised later). And web developers need to be creative in ways that they can reduce data consumption on subsequent website visits to the sites they build. For instance, through caching or giving users a low-data version of their site once they land on the page before loading any subsequent content.
 
@@ -20,8 +20,8 @@ In developing countries like Kenya, with companies shifting online, there is a g
 
 Through this project, I would like to accomplish two things:
 
-- Create a directory of Kenyan websites - websites with extensions “.co.ke” or “.ke” or that include “kenya” within the domain name.
-- Of the collected sites, note how much data is downloaded on the landing page of the site and organize this data into a repository.
+-   Create a directory of Kenyan websites - websites with extensions “.co.ke” or “.ke” or that include “kenya” within the domain name.
+-   Of the collected sites, note how much data is downloaded on the landing page of the site and organize this data into a repository.
 
 ## Data Collection and Preparation
 
@@ -186,17 +186,19 @@ Having obtained two additional metrics of each website, i.e. the performance and
 In order to answer questions that the data presented, there still remained missing pieces of information that would enable me to analyze the data accurately. With metrics such as performance, size of webpage downloaded and average time spent on a website, we could take a look at the general trend of the top websites in Kenya as shown below.
 
 <img
-  alt="Size of the web page downloaded"
-  src={'https://raw.githubusercontent.com/laudebugs/kenya-web-project/master/analysis/graphs/Size%20of%20the%20web%20page%20downloaded.png'}
-  width={'100%'}
+    alt="Size of the web page downloaded"
+    src={
+        'https://raw.githubusercontent.com/laudebugs/kenya-web-project/master/analysis/graphs/Size%20of%20the%20web%20page%20downloaded.png'
+    }
+    width={'100%'}
 />
 
 The optimal size of a web page is 0 - 1 MB downloaded once a use logs onto a site. This is of course, not taking into account cached resources that might reduce the size of the page downloaded.
 
 <img
-  alt="TimeSpentOnWebsite"
-  src={'https://raw.githubusercontent.com/laudebugs/kenya-web-project/master/analysis/graphs/TimeSpentOnWebsite.png'}
-  width={'100%'}
+    alt="TimeSpentOnWebsite"
+    src={'https://raw.githubusercontent.com/laudebugs/kenya-web-project/master/analysis/graphs/TimeSpentOnWebsite.png'}
+    width={'100%'}
 />
 
 The modal time spent on a website by Kenyans is 3 minutes with the average coming to 7.2682 minutes.
@@ -220,8 +222,8 @@ lighthouse https://www.bet365.com/ --quiet --output json --output-path ./www_Bet
 
 ### References
 
-- [Multisite Lighthouse](https://github.com/sahava/multisite-lighthouse)
-- [Top Sites in Kenya](https://www.alexa.com/topsites/countries/KE)
-- Google Chrome Lighthouse [Github Repository](https://github.com/GoogleChrome/lighthouse)
+-   [Multisite Lighthouse](https://github.com/sahava/multisite-lighthouse)
+-   [Top Sites in Kenya](https://www.alexa.com/topsites/countries/KE)
+-   Google Chrome Lighthouse [Github Repository](https://github.com/GoogleChrome/lighthouse)
 
 -> Checkout the [Github Repository](https://github.com/laudebugs/kenya-web-project)
