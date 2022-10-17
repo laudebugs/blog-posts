@@ -71,3 +71,7 @@ jobs:
           repo: sandstorm
           owner: laudebugs
           event_type: posts_update
+          message: |
+              {
+                "commit_sha": ${{GITHUB_REF#refs/heads/}}
+              }
