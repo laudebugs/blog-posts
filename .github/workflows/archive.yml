@@ -55,6 +55,9 @@ jobs:
               with:
                   files: |
                       out
+            - name: Set outputs
+              id: set_sha
+              run: echo "::set-output name=sha_short::$(git rev-parse --short HEAD)"
             - name: commit & Push changes 💾
               if: steps.verify-changed-files.outputs.files_changed == 'true'
               run: |
@@ -73,5 +76,5 @@ jobs:
                   event_type: posts_update
                   message: |
                       {
-                        "commit_sha": "${{ github.sha_short }}"
+                        "commit_sha": "${{ steps.set_sha.outputs.sha_short }}"
                       }
