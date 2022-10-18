@@ -1,6 +1,4 @@
 ---
-title: "RxJs Pitfalls: Passing in a Observer's next function as a callback to pipe operators"
-publishedOn: '2022-10-17'
 author: Laurence Ininda
 summary: 'When using RxJs operators, you can pass in a callback function as the next function of an Observer. A common pitfall is to pass in the next function of an Observer as a callback to an RxJs operator. This post explains why this may be a bad idea causing errors that may be hard to debug and how to avoid it.'
 slug: 'rxjx-pitfalls-passing-observer-next-to-pipe-able-operator'
@@ -34,7 +32,9 @@ One way to pass the current value to the subject is using the `tap` operator tha
 If we only pass a callback function that logs out the current value in the observable stream, we would have something that looks like:
 
 ```tsx
-stream$.pipe(tap(console.log)).subscribe()
+stream$.pipe(
+    tap(console.log)
+).subscribe()
 /*
 // Result would look like:
 0
@@ -50,7 +50,9 @@ If we have a subject called `_count` where we would like to keep track of the cu
 ```tsx
 const _count = new Subject<number>()
 
-stream$.pipe(tap(_count.next)).subscribe()
+stream$.pipe(
+    tap(_count.next)
+).subscribe()
 ```
 
 However, you'll notice that the above implementation **does not work**, resulting in the error: `TypeError: _this._throwIfClosed is not a function`.
@@ -67,7 +69,9 @@ const observerStore = {
     },
 }
 /* Replacing the _count with our observer would then look like below👇🏻 */
-stream$.pipe(tap(observerStore.next)).subscribe()
+stream$.pipe(
+    tap(observerStore.next)
+).subscribe()
 ```
 
 The implementation above would also give us an error: `TypeError: Cannot read properties of undefined (reading 'push')`. For the same reason that the `this` reference would refer to the `global` object and not the `observerStore` object.
@@ -100,7 +104,9 @@ stream$.pipe(tap<number>(_count.next)).subscribe()
 
     ```tsx
     /* This works */
-    stream$.pipe(tap(observerStore)).subscribe()
+    stream$.pipe(
+        tap(observerStore)
+    ).subscribe()
     ```
 
 2. Bind the observer to `this`
@@ -109,10 +115,14 @@ stream$.pipe(tap<number>(_count.next)).subscribe()
 
     ```tsx
     /* _count Subjct */
-    stream$.pipe(tap(_count.next.bind(_count))).subscribe()
+    stream$.pipe(
+        tap(_count.next.bind(_count))
+    ).subscribe()
 
     /* the observerStore */
-    stream$.pipe(tap(observerStore.next.bind(observerStore))).subscribe()
+    stream$.pipe(
+        tap(observerStore.next.bind(observerStore))
+    ).subscribe()
     ```
 
     [As the MDN docs state](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind), “The **`bind()`** method creates a new function that, when called, has its `this`keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.”
