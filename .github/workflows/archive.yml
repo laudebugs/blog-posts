@@ -3,75 +3,75 @@
 
 name: Update Posts Archive
 on:
-  push:
-    branches: [main]
+    push:
+        branches: [main]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
-    steps:
-      - name: 'Checkout 🧞'
-        uses: actions/checkout@v2
-        with:
-            fetch-depth: 0
-      - run: git fetch
-      - uses: oleksiyrudenko/gha-git-credentials@v2-latest
-        with:
-          token: '${{ secrets.BLOG_POSTS }}'
-      - name: Cache node modules
-        uses: actions/cache@v2
-        env:
-          cache-name: node-cache
-        with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
-      - name: 'Set up user 🩸'
-        uses: fregante/setup-git-user@v1
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - name: Install packages 🤖
-        run: npm install
-      - name: 'Make sure Posts follow Appopriate format 🧪'
-        run: npm run test
-      - name: 'Compile TS files 🎄'
-        run: npm run build
-      - name: Update Rss Feeds and Archive 🦄
-        run: |
-          node dist/index.js
-      - name: Verify Changed files 🐒
-        uses: tj-actions/verify-changed-files@v8.3
-        id: verify-changed-files
-        with:
-          files: |
-            out
-      - name: commit & Push changes 💾
-        if: steps.verify-changed-files.outputs.files_changed == 'true'
-        run: |
-          # Stage the file, commit and push
-          git pull
-          git add out
-          git commit -m "Updated posts archive"
-          git push origin main
-      - name: Echo updates to Blog 🕊
-        uses: mvasigh/dispatch-action@main
-        with:
-          # You should create a personal access token and store it in your repository
-          token: ${{ secrets.BLOG_POSTS }}
-          repo: sandstorm
-          owner: laudebugs
-          event_type: posts_update
-          message: |
-              {
-                "commit_sha": "${{ github.sha }}"
-              }
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [14.x]
+                # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        steps:
+            - name: 'Checkout 🧞'
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 0
+            - run: git fetch
+            - uses: oleksiyrudenko/gha-git-credentials@v2-latest
+              with:
+                  token: '${{ secrets.BLOG_POSTS }}'
+            - name: Cache node modules
+              uses: actions/cache@v2
+              env:
+                  cache-name: node-cache
+              with:
+                  # npm cache files are stored in `~/.npm` on Linux/macOS
+                  path: ~/.npm
+                  key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-build-${{ env.cache-name }}-
+                      ${{ runner.os }}-build-
+                      ${{ runner.os }}-
+            - name: 'Set up user 🩸'
+              uses: fregante/setup-git-user@v1
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v2
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'npm'
+            - name: Install packages 🤖
+              run: npm install
+            - name: 'Make sure Posts follow Appopriate format 🧪'
+              run: npm run test
+            - name: 'Compile TS files 🎄'
+              run: npm run build
+            - name: Update Rss Feeds and Archive 🦄
+              run: |
+                  node dist/index.js
+            - name: Verify Changed files 🐒
+              uses: tj-actions/verify-changed-files@v8.3
+              id: verify-changed-files
+              with:
+                  files: |
+                      out
+            - name: commit & Push changes 💾
+              if: steps.verify-changed-files.outputs.files_changed == 'true'
+              run: |
+                  # Stage the file, commit and push
+                  git pull
+                  git add out
+                  git commit -m "Updated posts archive"
+                  git push origin main
+            - name: Echo updates to Blog 🕊
+              uses: mvasigh/dispatch-action@main
+              with:
+                  # You should create a personal access token and store it in your repository
+                  token: ${{ secrets.BLOG_POSTS }}
+                  repo: sandstorm
+                  owner: laudebugs
+                  event_type: posts_update
+                  message: |
+                      {
+                        "commit_sha": "${{ github.sha_short }}"
+                      }
