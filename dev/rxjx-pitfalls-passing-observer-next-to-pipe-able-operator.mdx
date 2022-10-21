@@ -113,7 +113,7 @@ stream$.pipe(tap<number>(_count.next)).subscribe()
 
 2. Bind the observer to `this`
 
-    One could [`Function.prototype.bind`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind) which is available to the function prototype to bind `this` to the observer object so that when `this` is referenced, the function references the observer instead of the global `this` object:
+    One could use [`Function.prototype.bind`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind) which is available to the function prototype to bind `this` to the observer object so that when `this` is referenced, the function references the observer instead of the global `this` object:
 
     ```tsx
     /* _count Subjct */
