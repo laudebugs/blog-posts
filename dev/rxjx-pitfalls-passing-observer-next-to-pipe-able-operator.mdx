@@ -127,7 +127,7 @@ stream$.pipe(tap<number>(_count.next)).subscribe()
     ).subscribe()
     ```
 
-    [As the MDN docs state](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind), “The **`bind()`** method creates a new function that, when called, has its `this`keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.”
+    [As the MDN docs state](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_objects/Function/bind), “The **`bind()`** method creates a new function that, when called, has its `this`keyword set to the provided value, with a given sequence of arguments preceding any provided when the new function is called.”
 
 Although both of the solutions work, passing the observer object is much more clear to another reader of the code on what is going on whereas the latter would cause someone who didn't write the code to stop and ask why we are calling `.bind` in the first place.
 
