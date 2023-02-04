@@ -13,17 +13,17 @@ imageOriginalUrl: ''
 ---
 
 
-
 We’ve all sometimes mistakingly closed a document editor with a paragraph or two of unsaved edits, or that browser tab where we were drafting an email. Most of the time, when we attempt to navigate away to other parts of these applications, we get a reminder through a dialog box that we have some information that hasn’t yet been synced in the cloud (if the particular app in question even has an autosave feature).
 
 Within Angular applications, we can leverage the `CanDeactivate` interface to implement a route guard which can then be added to the [route’s `canDeactivate` property](https://angular.io/api/router/Route#properties) to notify a user that they have unsaved changes in their app.
 
 ## Defining the Component that can deactivate navigation
 
-<aside>
+<Aside>
+
 💡 The `CanDeactivate` is an interface that a component has to implement that allows it to “intercept” navigation calls and cancel or proceed with navigation.
 
-</aside>
+</Aside>
 
 The component that checks whether navigation can proceed or be cancelled contains a function, `canDeactivate`,  that can be called in the route guard to check whether or not navigation away from the component or page can continue or be cancelled.
 
@@ -238,10 +238,9 @@ With our guard in place, if we edit the form and try to navigate away without sa
 You can [preview an example of the app here](https://angular-zzjpgu.stackblitz.io):
 <StackBlitzEmbed
   projectId="angular-zzjpgu"
-  file="src/app/components/home.component.ts"
+  openFile="src/app/components/home.component.ts"
   view="preview">
 </StackBlitzEmbed>
-{/* [https://stackblitz.com/edit/angular-zzjpgu?embed=1&file=src/app/components/home.component.ts&view=preview](https://stackblitz.com/edit/angular-zzjpgu?embed=1&file=src/app/components/home.component.ts&view=preview) */}
 
 ## Links and Resources
 
@@ -251,4 +250,6 @@ You can [preview an example of the app here](https://angular-zzjpgu.stackblitz.i
 - [Advancements in the Angular Router](https://blog.angular.io/advancements-in-the-angular-router-5d69ec4c032) (Angular Blog)
 
 ### Here's my track of the Week
-<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/5Te2aNOI54aBtQPqLqMsSq?utm_source=generator&theme=0" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+<SpotifyTrack
+  src="https://open.spotify.com/embed/track/5Te2aNOI54aBtQPqLqMsSq?utm_source=generator&theme=0"
+></SpotifyTrack>
