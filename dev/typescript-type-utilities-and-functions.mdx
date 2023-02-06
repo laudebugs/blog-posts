@@ -48,12 +48,10 @@ Here are some utility types and functions that I have found useful that are not 
 1. The `filterKeys` type filters a type based on the regex provided. This is useful if you would like to get the keys of an object that meet a certain criteria.
 
     ```ts
-    funciton filterKeys<K, T>(source: T, regExp: RegExp): FilteredType<T, K>[]{
-    	return Object.keys(sourceObject).map((key) => {
-    		if(regExp.test(key)) {
-    			extractedKeys.push(key as FilteredType<T, K>)
-    		}
-    	})
+    function filterKeys<T extends Object, K extends RegExp>(source: T, regExp: K): FilteredType<T, K>[]{
+      return Object.keys(source).filter((key) =>
+        regExp.test(key)
+      ) as FilteredType<T, K>[]
     }
     ```
 
