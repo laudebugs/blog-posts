@@ -39,10 +39,9 @@ I’ll group the commands into (a) Commands within a git repository and (b) comm
 
 ### Within a normal git repository
 
-<aside>
-💡 These Commands can also be performed within a worktree in a bare git repository
-
-</aside>
+<Aside>
+These Commands can also be performed within a worktree in a bare git repository
+</Aside>
 
 1. `ac` - Pass in a commit message to the git alias. The command stage all files (`git add -A`) and commits with the commit message passed in.
 
@@ -93,10 +92,9 @@ I’ll group the commands into (a) Commands within a git repository and (b) comm
 
 ### Working with a bare git repository
 
-<aside>
-💡 Working within a git repository provides much needed functionality. However, bare repositories with git worktrees. provide an opportunity to switch in between different pieces of work seamlessly, without having to clone the repository over and over again.
-
-</aside>
+<Aside>
+Working within a git repository provides much needed functionality. However, bare repositories with git worktrees. provide an opportunity to switch in between different pieces of work seamlessly, without having to clone the repository over and over again.
+</Aside>
 
 1. `clone-bare` - Pass in a git url and clone into a bare repository.
 
@@ -104,8 +102,9 @@ I’ll group the commands into (a) Commands within a git repository and (b) comm
     clone-bare = !git clone --bare
     ```
 
-2. `wa` -”worktree add” - Within a bare repository, this git alias takes two commands, the first being the new branch name, the second being the base branch. The new worktree will be located at the path that matches the branch name and based on the base branch
-Note: The Command `git rev-parse --git-common-dir ensures that worktree paths are always generated from the root of the bare repo
+2. `wa` -”worktree add” - Within a bare repository, this git alias takes two commands, the first being the new branch name, the second being the base branch. The new worktree will be located at the path that matches the branch name and based on the base branch.
+
+    Note: The Command `git rev-parse --git-common-dir` ensures that worktree paths are always generated from the root of the bare repo
 
     ```bash
     wa = "!sh -c \"cd $(git rev-parse --git-common-dir) && git worktree add --track -b '$1' '$1' '$2'\" -"
