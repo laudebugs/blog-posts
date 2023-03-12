@@ -35,13 +35,13 @@ After editing some files in a git repository, running `git ac "docs: update note
 
 Herein, therefore, is a list of git aliases that drive my daily work.
 
-I’ll group the commands into (a) Commands within a git repository and (b) commands within a ********bare******** git repository
+I’ll group the commands into (a) Commands within a git repository and (b) commands within a **bare** git repository
 
 ### Within a normal git repository
 
-<Aside>
+<Note>
 These Commands can also be performed within a worktree in a bare git repository
-</Aside>
+</Note>
 
 1. `ac` - Pass in a commit message to the git alias. The command stage all files (`git add -A`) and commits with the commit message passed in.
 
@@ -92,9 +92,9 @@ These Commands can also be performed within a worktree in a bare git repository
 
 ### Working with a bare git repository
 
-<Aside>
+<Note>
 Working within a git repository provides much needed functionality. However, bare repositories with git worktrees. provide an opportunity to switch in between different pieces of work seamlessly, without having to clone the repository over and over again.
-</Aside>
+</Note>
 
 1. `clone-bare` - Pass in a git url and clone into a bare repository.
 
@@ -113,7 +113,7 @@ Working within a git repository provides much needed functionality. However, bar
 3. `fetch-some` - Inside a bare repository, fetch and update the local branches  of the comma-delimited list of branches. This is useful if one would want to update the local branches with their remote updates.
 
     ```bash
-    fetch-some = "!f() { IFS=','; for b in $1; do git fetch origin $b:$b; done; unset IFS; }; f"
+    fetch-some = "!f() { IFS=','; for b in $1; do git fetch origin $b:$b -u; done; unset IFS; }; f"
     ```
 
 4. `fetch-all` - For all the worktrees in a bare repository, update with their remotes. This is the equivalent of going into each of the worktrees and running `git pull`
@@ -139,7 +139,7 @@ All the git aliases mentioned above can be directly added to the `~/.gitconfig` 
 	# This clones a git repository into bare repository
 	clone-bare = !git clone --bare
 	# For each the comma-delimited x of provided input a,b,c,...,n run git fetch origin x:x
-	fetch-some = "!f() { IFS=','; for b in $1; do git fetch origin $b:$b; done; unset IFS; }; f"
+	fetch-some = "!f() { IFS=','; for b in $1; do git fetch origin $b:$b -u; done; unset IFS; }; f"
 	# For each branch y in a git bare repo, run git fetch origin y:y
 	fetch-all = "!git for-each-ref --format='%(refname:short)' refs/heads/ | while read branch; do git fetch origin $branch:$branch; done"
 	# List the last n checked out branches in a git repository
@@ -158,7 +158,6 @@ All the git aliases mentioned above can be directly added to the `~/.gitconfig` 
 	wa = "!sh -c \"cd $(git rev-parse --git-common-dir) && git worktree add --track -b '$1' '$1' '$2'\" -"
 	adc = !git add -A && git commit -S -m
 ```
-
 ## References
 
 - [Git Documentation on Git Aliases](https://www.git-scm.com/book/en/v2/Git-Basics-Git-Aliases#_git_aliases)
