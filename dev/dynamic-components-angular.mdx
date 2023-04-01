@@ -10,12 +10,12 @@ image: ''
 imageCredit: 'Photo by <a href="https://unsplash.com/@theshubhamdhage?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Shubham Dhage</a> on <a href="https://unsplash.com/?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Unsplash</a>'
 ---
 
-Angular components can be created (instantiated) at build-time or at run-time. Creating components at run-time (dynamically) is what we are going to look at.
+Angular components can be created(instantiated) at different points of the applications cycle wither at build-time or at run-time. Creating components at run-time (dynamically) is what we are going to look at.
 
 Broadly speaking, there are two ways to create dynamic components in Angular:
 
-1. Using a `ViewContainerRef` - that “represents a container where one or more views can be attached to a component.” or
-2. By using Angular's built in `NgComponentOutlet` directive
+1. Using a `ViewContainerRef` - that [“represents a container where one or more views can be attached to a component.”](https://angular.io/api/core/ViewContainerRef#viewcontainerref) or
+2. By using Angular's built in [`NgComponentOutlet` directive](https://angular.io/api/common/NgComponentOutlet)
 
 The main focus of this article will be the former, using a `ViewContainerRef` to create dynamic components since the Angular documentation is really clear on the second way - using `NgComponentOutlet`.
 
@@ -25,11 +25,11 @@ The `ViewContainerRef` is a class that gets access to a container where other co
 
 To dynamically create a component, we have to decide how and where we would like to place the component (the “anchor point”).
 
-## Defining the anchor point
+## Step 1. Defining the anchor point
 
 How you define the anchor point determines where you can place it within a host component.
 
-### The Anchor Directive
+### (i) The Anchor Directive
 
 Following the [Angular docs example](https://angular.io/guide/dynamic-component-loader#the-anchor-directive) on creating a dynamic component, one can utilize a directive placed on an element such that the element will act as an insertion point to the dynamic component (a host - i.e. “Create the dynamic component and place me wherever you see this directive” on an element.)
 
@@ -43,7 +43,7 @@ import { Directive, ViewContainerRef } from '@angular/core'
 @Directive({
     selector: '[userProfileHost]',
 })
-export class UserProfileDirective {
+export class UserProfileHostDirective {
     constructor(public viewContainerRef: ViewContainerRef) {}
 }
 ```
@@ -61,14 +61,20 @@ When we then create our host component template, we can place this directive on 
 <ng-container userProfileHost></ng-container>
 ```
 
+<Aside>
+
+All of the above ways are valid ways of attaching an anchor directive. However, as the Angular docs point out, ["[t]he <ng-template> element is a good choice for dynamic components because it doesn't render any additional output."](https://angular.io/guide/dynamic-component-loader#loading-components)
+
+</Aside>
+
 We can then get a reference to the element with the directive by querying the component template for the first occurrence of the directive (using `ViewChild` ), or all occurrences of the directive (using `ViewChildren`):
 
 ```ts
 /* Using ViewChild to get the first occurrence */
-@ViewChild(UserProfileDirective, { static: true }) userProfileHost: UserProfileDirective;
+@ViewChild(UserProfileHostDirective, { static: true }) userProfileHost: UserProfileHostDirective;
 
 /* Using ViewChildren to get the all occurrences */
-@ViewChildren(UserProfileDirective, { static: true }) userProfileHosts: QueryList<UserProfileDirective>;
+@ViewChildren(UserProfileHostDirective, { static: true }) userProfileHosts: QueryList<UserProfileHostDirective>;
 ```
 
 <Aside>
@@ -77,7 +83,7 @@ Note that `@ViewChildren` will return a `QueryList` - that contains a list of of
 
 </Aside>
 
-### Using a Template Variable to target an element as an Anchor
+### (ii) Using a Template Variable to target an element as an Anchor
 
 One can target an element to act as a host for our dynamic component by using a template variable that follows the syntax `#` followed by whatever variable name we would like. For example, if our template variable name is to be called: `UserProfileEntry` then, in our html template, we would have:
 
@@ -92,18 +98,21 @@ One can target an element to act as a host for our dynamic component by using a 
 <ng-container #UserProfileEntry></ng-container>
 ```
 
-### The Host View as the Anchor
+### (iii) The Host View as the Anchor
 
 We can use the host view (the component in which we will create the dynamic component) as an anchor for the newly created component. In this case, the created components would be appended at the end of the DOM tree. This works if we know that we don't have to insert the newly created elements before other elements that were generated at build time.
 
 In this case, we inject the `ViewContainerRef` into the component:
 
-## Creating the Dynamic Component
+## Step 2: Creating the Dynamic Component
 
 Taking the `@ViewChild` use case, (the same applies to the `@ViewChildren` case), the view queries are set before the `ngAfterViewInit` life cycle hook is called. We can then create our dynamic components at this point.
 
 ```ts
 import { Component, OnDestroy, AfterViewInit, ViewChild, } from '@angular/core';
+
+/* We defined the user profile host directive earlier */
+import { UserProfileHostDirective } from './user-profile-host/user-profile-host.directive.ts';
 
 /* Assume we created this UserProfile component somewhere else */
 import { UserProfileComponent } from './user-profile/user-profile-component.ts';
@@ -114,8 +123,9 @@ import { UserService } from './services/user-service/user.service.ts';
 	selector: 'app-component',
 	template: `<ng-template userProfileHost></ng-template>`,
 })
-export clase AppComponent extends OnInit, AfterViewInit {
-	@ViewChild(UserProfileDirective, { static: true }) userProfileHost: UserProfileDirective;
+export class AppComponent extends OnInit, AfterViewInit {
+	@ViewChild(UserProfileHostDirective, { static: true }) userProfileHost: UserProfileHostDirective;
+
 	userProfile!: {username: string, picture: string}
 
 	constructor(public userService: UserService){}
@@ -143,11 +153,9 @@ Similar example while using a template reference as an anchor:
 // ... code ommited
 @Component({
 	selector: 'app-component',
-	template: `
-				<ng-container #UserProfileEntry></ng-container>
-				`,
+	template: `<ng-container #UserProfileEntry></ng-container>`,
 })
-export clase AppComponent extends OnInit, AfterViewInit {
+export class AppComponent extends OnInit, AfterViewInit {
 
 	@ViewChild('UserProfileEntry', { read: ViewContainerRef}) userProfileEntry: ViewContainerRef
 
@@ -168,7 +176,7 @@ Similar example using the host element as the anchor:
 	selector: 'app-component',
 	template: `<h1> Host element </h1>`,
 })
-export clase AppComponent extends OnInit, AfterViewInit {
+export class AppComponent extends OnInit, AfterViewInit {
 
 	// ... code ommited
 
@@ -292,19 +300,19 @@ In our app.component.ts, we would then create an injector and pass it to our com
 ```ts
 // ... code ommitted
 export class AppComponent extends AfterViewInit {
-    constructor(public injector: Injector) {}
+    constructor(public parentInjector: Injector) {}
     // code ommited
     ngAfterViewInit() {
         /* Create the injector to be passed to the component and provide the value */
         const injector = Injector.create({
             providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
-            parent: this.injector,
+            parent: this.parentInjector,
         })
 
         /* Create the component with the injector passed in */
         const userProfileComponent = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, {
             index: 0,
-            injector: injector,
+            injector,
         })
     }
 }
