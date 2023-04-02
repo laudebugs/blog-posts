@@ -35,15 +35,33 @@ Following the [Angular docs example](https://angular.io/guide/dynamic-component-
 
 To achieve this, we first create the directive and inject the `ViewContainerRef` . The `ViewContainerRef` will get a reference to the element on which the directive is placed, dynamically create the component and insert it into the view at the position where the element is.
 
-Take the scenario where we would like to create a list of user profiles with images for which we would want to display (a simple example that can be achieved with other ways but easy enough to demonstrate with dynamic components)
+Take the scenario where we would like to display [a list of movies](https://github.com/laudebugs/dynamic-components-angular/wiki/Movie-Data) with their information (a simple example that can be achieved with other ways but easy enough to demonstrate with dynamic components).
+
+A movie has the following interface:
+
+```ts
+export interface IMovie {
+    id: number
+    title: string
+    poster: string
+    synopsis: string
+    genres: Array<string>
+    year: number
+    director: string
+    actors: Array<string>
+    hours: Array<string>
+}
+```
+
+We can then define our `MovieHostDirective` as follows:
 
 ```ts
 import { Directive, ViewContainerRef } from '@angular/core'
 
 @Directive({
-    selector: '[userProfileHost]',
+    selector: '[movieHost]',
 })
-export class UserProfileHostDirective {
+export class MovieHostDirective {
     constructor(public viewContainerRef: ViewContainerRef) {}
 }
 ```
@@ -52,18 +70,18 @@ When we then create our host component template, we can place this directive on 
 
 ```html
 <!-- using an html element -->
-<div userProfileHost></div>
+<div movieHost></div>
 
 <!-- Using ng-template -->
-<ng-template userProfileHost></ng-template>
+<ng-template movieHost></ng-template>
 
 <!-- using ng-container -->
-<ng-container userProfileHost></ng-container>
+<ng-container movieHost></ng-container>
 ```
 
 <Aside>
 
-All of the above ways are valid ways of attaching an anchor directive. However, as the Angular docs point out, ["[t]he <ng-template> element is a good choice for dynamic components because it doesn't render any additional output."](https://angular.io/guide/dynamic-component-loader#loading-components)
+All of the above ways are valid ways of attaching an anchor directive. However, as the Angular docs point out, ["[t]he `ng-template` element is a good choice for dynamic components because it doesn't render any additional output."](https://angular.io/guide/dynamic-component-loader#loading-components)
 
 </Aside>
 
@@ -71,31 +89,31 @@ We can then get a reference to the element with the directive by querying the co
 
 ```ts
 /* Using ViewChild to get the first occurrence */
-@ViewChild(UserProfileHostDirective, { static: true }) userProfileHost: UserProfileHostDirective;
+@ViewChild(MovieHostDirective, { static: true }) movieHost: MovieHostDirective;
 
 /* Using ViewChildren to get the all occurrences */
-@ViewChildren(UserProfileHostDirective, { static: true }) userProfileHosts: QueryList<UserProfileHostDirective>;
+@ViewChildren(MovieHostDirective, { static: true }) movieHosts: QueryList<MovieHostDirective>;
 ```
 
 <Aside>
 
-Note that `@ViewChildren` will return a `QueryList` - that contains a list of of `ViewContainerRef` types. To get elements inside of the `QueryList`, one can use the `QueryList`'s `.length` property together with the `.get` method to get an element at a particular index. For example, for a query list of length 1, we can get the first element by `userProfileHosts.get(0)`. In our example this will return a `ViewContainerRef` that contains a `UserProfileDirective` instance. Documentation on [`@ViewChildren` can be found here](https://angular.io/api/core/ViewChildren) .
+Note that `@ViewChildren` will return a `QueryList` - that contains a list of of `ViewContainerRef` types. To get elements inside of the `QueryList`, one can use the `QueryList`'s `.length` property together with the `.get` method to get an element at a particular index. For example, for a query list of length 1, we can get the first element by `movieHosts.get(0)`. In our example this will return a `ViewContainerRef` that contains a `MovieHostDirective` instance. Documentation on [`@ViewChildren` can be found here](https://angular.io/api/core/ViewChildren) .
 
 </Aside>
 
 ### (ii) Using a Template Variable to target an element as an Anchor
 
-One can target an element to act as a host for our dynamic component by using a template variable that follows the syntax `#` followed by whatever variable name we would like. For example, if our template variable name is to be called: `UserProfileEntry` then, in our html template, we would have:
+One can target an element to act as a host for our dynamic component by using a template variable that follows the syntax `#` followed by whatever variable name we would like. For example, if our template variable name is to be called: `TemplateRefAnchor` then, in our html template, we would have:
 
 ```html
 <!-- using an html element -->
-<div #UserProfileEntry></div>
+<div #TemplateRefAnchor></div>
 
 <!-- Using ng-template -->
-<ng-template #UserProfileEntry></ng-template>
+<ng-template #TemplateRefAnchor></ng-template>
 
 <!-- using ng-container -->
-<ng-container #UserProfileEntry></ng-container>
+<ng-container #TemplateRefAnchor></ng-container>
 ```
 
 ### (iii) The Host View as the Anchor
@@ -109,40 +127,31 @@ In this case, we inject the `ViewContainerRef` into the component:
 Taking the `@ViewChild` use case, (the same applies to the `@ViewChildren` case), the view queries are set before the `ngAfterViewInit` life cycle hook is called. We can then create our dynamic components at this point.
 
 ```ts
-import { Component, OnDestroy, AfterViewInit, ViewChild, } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, } from '@angular/core';
 
-/* We defined the user profile host directive earlier */
-import { UserProfileHostDirective } from './user-profile-host/user-profile-host.directive.ts';
+/* We defined the MovieHostDirective earlier */
+import { MovieHostDirective } from '../core/directives/movie-host.directive'
+/* Assume we created this MovieComponent component somewhere else */
+import { MovieComponent } from '../core/components/movie/movie.component'
 
-/* Assume we created this UserProfile component somewhere else */
-import { UserProfileComponent } from './user-profile/user-profile-component.ts';
-
-/* Assume that we have a User Service that retrieves user profile data */
-import { UserService } from './services/user-service/user.service.ts';
 @Component({
-	selector: 'app-component',
-	template: `<ng-template userProfileHost></ng-template>`,
+	selector: 'app-home',
+	template: `<ng-template movieHost></ng-template>`,
 })
-export class AppComponent extends OnInit, AfterViewInit {
-	@ViewChild(UserProfileHostDirective, { static: true }) userProfileHost: UserProfileHostDirective;
+export class HomeComponent extends AfterViewInit {
+    /* Look up the element containing the MoviehostDirective */
+    @ViewChild(MovieHostDirective, { static: true, read: ViewContainerRef }) movieHost!: ViewContainerRef
 
-	userProfile!: {username: string, picture: string}
+    /* Look Up the template reference called TemplateRefAnchor */
+    @ViewChild('TemplateRefAnchor', { static: true, read: ViewContainerRef }) templateRefAnchor!: ViewContainerRef
 
-	constructor(public userService: UserService){}
-
-	ngOnInit(){
-		this.userProfile = this.userService.profile
-	}
+    /* Another template reference to use createOptions */
+    @ViewChild('UsingCreateComponentOptionsAnchor', { static: true, read: ViewContainerRef }) createComponentOptionsAnchor!: ViewContainerRef
 
 	/* Create dynamic components here */
 	ngAfterViewInit(){
-		const viewContainerRef = this.userProfileHost.viewContainerRef
-
-		// Create the component
-		const userProfileComponent = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
-
-		// Pass data to the dynamically created component here.
-		userProfileComponent.instance.profile = this.userProfile
+        const component = this.movieHost.createComponent(MovieComponent)
+        component.instance.movie = MOVIES[0]
 	}
 }
 ```
@@ -152,18 +161,17 @@ Similar example while using a template reference as an anchor:
 ```ts
 // ... code ommited
 @Component({
-	selector: 'app-component',
-	template: `<ng-container #UserProfileEntry></ng-container>`,
+	selector: 'app-home',
+	template: `<ng-template #TemplateRefAnchor></ng-template>`,
 })
-export class AppComponent extends OnInit, AfterViewInit {
-
-	@ViewChild('UserProfileEntry', { read: ViewContainerRef}) userProfileEntry: ViewContainerRef
-
-	// ... code ommited
+export class HomeComponent extends AfterViewInit {
+    /* Look Up the template reference called TemplateRefAnchor */
+    @ViewChild('TemplateRefAnchor', { static: true, read: ViewContainerRef }) templateRefAnchor!: ViewContainerRef
 
 	ngAfterViewInit(){
-		const userProfileComponent = this.userProfileEntry.createComponent<UserProfileComponent>(UserProfileComponent)
-	    userProfileComponent.instance.user = this.userProfile;
+        /* Create the dynamic component using the template reference as an anchor */
+        const component = this.templateRefAnchor.createComponent(MovieComponent)
+        component.instance.movie = MOVIES[0]
 	}
 }
 ```
@@ -173,21 +181,16 @@ Similar example using the host element as the anchor:
 ```ts
 // ... code ommited
 @Component({
-	selector: 'app-component',
+	selector: 'app-home',
 	template: `<h1> Host element </h1>`,
 })
-export class AppComponent extends OnInit, AfterViewInit {
+export class HomeComponent extends AfterViewInit {
 
-	// ... code ommited
-
-	/* Inject the ViewContainerRef into the component */
-	constructor(public viewContainerRef: ViewContainerRef){}
+    constructor(private viewContainerRef: ViewContainerRef) { }
 
 	ngAfterViewInit(){
-		/* Create the component */
-		const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
-		/* Pass data to the dynamically created component here. */
-		userProfileComponent.instance.profile = this.userProfile
+        const component = this.viewContainerRef.createComponent(MovieComponent)
+        component.instance.movie = MOVIES[0]
 	}
 }
 ```
@@ -218,17 +221,15 @@ Some ways to resolve this is to move our code into the `ngAfterContentInit` life
 
     ```ts
     // code ommitted
-    export class AppComponent implements AfterContentInit {
-        /* Inject the ChangeDetectorRef */
-        constructor(cd: ChangeDetectorRef) {}
+    export class HomeComponent implements AfterContentInit {
 
         /* Implement the AfterContentInit life cycle hook */
         ngAfterContentInit() {
             /* Create the component */
-            const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+            const movieComponent = this.viewContainerRef.createComponent<MovieComponent>(MovieComponent)
 
             /* Pass data to the dynamically created component here. */
-            userProfileComponent.instance.profile = this.userProfile
+            movieComponent.instance.movie = MOVIES[0]
         }
     }
     ```
@@ -237,16 +238,16 @@ Some ways to resolve this is to move our code into the `ngAfterContentInit` life
 
     ```ts
     // code ommitted
-    export class AppComponent implements AfterViewInit {
+    export class HomeComponent implements AfterViewInit {
         /* Inject the ChangeDetectorRef */
-        constructor(cd: ChangeDetectorRef) {}
+        constructor(private cd: ChangeDetectorRef, private viewContainerRef: ViewContainerRef) {}
 
         ngAfterViewInit() {
             /* Create the component */
-            const userProfileComponent = this.viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent)
+            const movieComponent = this.viewContainerRef.createComponent<MovieComponent>(MovieComponent)
 
             /* Pass data to the dynamically created component here. */
-            userProfileComponent.instance.profile = this.userProfile
+            movieComponent.instance.movie = MOVIES[0]
 
             /*  Tell angular to check for changes */
             this.cd.detectChanges()
@@ -261,14 +262,14 @@ The `ViewContainerRef` also provides a way to inject dependencies into our dynam
 -   `ngModuleRef` - an ngModuleRef of the component's `NgModule`
 -   `projectableNodes` - list of Dom nodes that should be projected though `ng-content`
 
-Things begin to get a little more interesting as we explore this options object and how it expands our flexibility with dynamically created components. We'll explore the first two for now (`index` and `injector`.
+Things begin to get a little more interesting as we explore this options object and how it expands our flexibility with dynamically created components. We'll explore the first two for now (`index` and `injector`).
 
 ### `index`
 
 The `index` parameter allows us to insert a dynamically created component at a particular index. Say we would like to create a second component dynamically and place it at index `0`, then we would do something like:
 
 ```ts
-const userProfileComponent2 = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, { index: 0 })
+const movieComponent2 = viewContainerRef.createComponent<MovieComponent>(MovieComponent, { index: 0 })
 ```
 
 Of course, we can't place an element at index `1` if the length of dynamically created components in the `ViewContainerRef` is `0`.
@@ -277,40 +278,40 @@ Of course, we can't place an element at index `1` if the length of dynamically c
 
 We can inject dependencies into our dynamic components using the `injector` parameter.
 
-Say, for instance, we want to pass in the user data when we create the component. We can first create an injector token that we can user for that dependency:
+Say, for instance, we want to pass in the movie when we create the component. We can first create an injector token that we can pass in for the movie dependency:
 
 ```ts
 import { InjectionToken } from '@angular/core'
 
-export const USER_TOKEN = new InjectionToken<string>('user')
+export const MOVIE_TOKEN = new InjectionToken<string>('movie')
 ```
 
-In our `user-profile.component.ts` file, we can then pass this dependency as a required dependency, or mark it as an optional dependency in the constructor - if you want to:
+In our `movie.component.ts` file, we can then pass this dependency as a required dependency, or mark it as an optional dependency in the constructor - if you want to:
 
 ```ts
-// In user-profile.component.ts
-constructor(@Inject(USER_TOKEN) public user: IUser) {}
+// In movie.component.ts
+constructor(@Inject(MOVIE_TOKEN) public movie: IMovie) {}
 
 // As an optional dependency
-constructor(@Inject(USER_TOKEN) @Optional() public user: IUser) {}
+constructor(@Inject(MOVIE_TOKEN) @Optional() public movie: IMovie) {}
 ```
 
 In our app.component.ts, we would then create an injector and pass it to our component when we create it. Firstly, we provide our token and pass in the value that we would like to be available to the dynamically created component.
 
 ```ts
 // ... code ommitted
-export class AppComponent extends AfterViewInit {
+export class HomeComponent extends AfterViewInit {
     constructor(public parentInjector: Injector) {}
     // code ommited
     ngAfterViewInit() {
         /* Create the injector to be passed to the component and provide the value */
         const injector = Injector.create({
-            providers: [{ provide: USER_TOKEN, useValue: this.userProfile }],
+            providers: [{ provide: MOVIE_TOKEN, useValue: MOVIES[0] }],
             parent: this.parentInjector,
         })
 
         /* Create the component with the injector passed in */
-        const userProfileComponent = viewContainerRef.createComponent<UserProfileComponent>(UserProfileComponent, {
+        const movieComponent = viewContainerRef.createComponent<MovieComponent>(MovieComponent, {
             index: 0,
             injector,
         })
@@ -355,3 +356,4 @@ The example code can be found in the [stackblitz here.](https://stackblitz.com/e
 -   [NgComponentOutlet](https://angular.io/api/common/NgComponentOutlet#ngcomponentoutlet)
 -   [QueryList](https://angular.io/api/core/QueryList)
 -   [Stackblitz example on Dynamic Components](https://stackblitz.com/edit/angular-ivy-lzyecr)
+-   [GitHub repository to run locally](https://github.com/laudebugs/dynamic-components-angular/wiki/Movie-Data)
