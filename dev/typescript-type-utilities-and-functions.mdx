@@ -22,7 +22,7 @@ Here are some utility types and functions that I have found useful that are not 
     }[keyof TypeToFilter]
     ```
 
-2. `Constructable<T`- a type that matches a type that can be instantiated, i.e. classes
+2. `Constructable<T>`- a type that matches a type that can be instantiated, i.e. classes
 
     ```ts
     type Constructable<T> = new (...args: any[]) => T
