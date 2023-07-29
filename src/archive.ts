@@ -4,10 +4,10 @@ import { getLastCommitDate } from './helpers/get-last-commit-date'
 
 export const writeToArchive = () => {
     const devPostData = getFilesFromDir('dev', false)
-    const journalPostData = getFilesFromDir('journal', false)
+    // const journalPostData = getFilesFromDir('journal', false)
     // const cuisinePostData = getFilesFromDir('cuisine', false)
 
-    let combinedData = [...devPostData, ...journalPostData]
+    let combinedData = [...devPostData]
 
     combinedData = combinedData.sort((a, b) => {
         return b.date - a.date
