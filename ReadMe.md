@@ -1,6 +1,6 @@
-# Posts Archive for laudebugs.me
+# [Archived] Posts Archive for laudebugs.me
 
-[![Update Posts Archive](https://github.com/laudebugs/blog-posts/actions/workflows/archive.yml/badge.svg)](https://github.com/laudebugs/blog-posts/actions/workflows/archive.yml)
+## ℹ️ Migrated all the articles related to my blog to [blog.laudebugs.me](https://github.com/laudebugs/blog.laudebugs.me) 
 
 > Find posts for my blog here! 
 
